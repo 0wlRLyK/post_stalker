@@ -6,6 +6,12 @@ name = "pypi"
 [packages]
 django = "*"
 psycopg2 = "*"
+django-machina = "*"
+django-haystack = "*"
+requests = "*"
+pysolr = "*"
+pillow = "*"
+django-ckeditor = "*"
 
 [dev-packages]
 
