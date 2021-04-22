@@ -1,0 +1,501 @@
+{% load i18n %}
+{% with profile.user as post_user %}
+    <!DOCTYPE html>
+    <head>
+        <title>Личный КПК Сталкера: {{ post_userusername }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link type="text/css" rel="StyleSheet" href="/static/post_stalker/users/profile/css/my.css"/>
+        <link type="text/css" rel="StyleSheet" href="/static/post_stalker/users/profile/css/hud.css"/>
+        <link type="text/css" rel="StyleSheet" href="/static/post_stalker/css/px-pagination.css"/>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="/static/post_stalker/js/atomWindows.js"></script>
+        <script src="/static/post_stalker/js/post_st/profile.js"></script>
+        <script src="/static/js/ajax.js"></script>
+        <script src="/static/post_stalker/js/px-pagination.js"></script>
+    </head>
+    <style type="text/css">@import url('http://post-stalker.com/design/ajax/ajax-2.0.css') all;</style>
+    <body>
+    <div class="container">
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".tab_content").hide();
+                $("ul.tabs h:first").addClass("active").show();
+                $(".tab_content:first").show();
+                $("ul.tabs h").click(function () {
+                    $("ul.tabs h").removeClass("active");
+                    $(this).addClass("active");
+                    $(".tab_content").hide();
+                    var activeTab = $(this).find("a").attr("href");
+                    $(activeTab).fadeIn();
+                    return false;
+                });
+            });
+        </script>
+        <table style="border: 0 solid rgb(38, 38, 38); background: url('/static/post_stalker/users/profile/design/knopki.png')"
+               align="center" border="0" cellpadding="0" cellspacing="0" height="40" width="1024px">
+            <tr>
+                <td>
+                    <ul class="tabs">
+                        <li style="margin-left:6px; margin-top: -19px; display:block; position: absolute;">
+                            <h><a href="#dannu"><img src="/static/post_stalker/users/profile/design/01.png" border="0"></a>
+                            </h>
+                        </li>
+                        <li style="margin-left:254px; margin-top: -19px; display:block; position: absolute;">
+                            <h><a href="#gryp"><img src="/static/post_stalker/users/profile/design/02.png"
+                                                    border="0"></a></h>
+                        </li>
+                        <li style="margin-left:506px; margin-top: -19px; display:block; position: absolute;">
+                            <h><a href="#rul"><img src="/static/post_stalker/users/profile/design/03.png"
+                                                   border="0"></a></h>
+                        </li>
+                        <li style="margin-left:750px; margin-top: -19px; display:block; position: absolute;">
+                            <h><a href="#kanal"><img src="/static/post_stalker/users/profile/design/04.png" border="0"></a>
+                            </h>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+        <div class="tab_container">
+            <div id="dannu" class="tab_content">
+                <table style="border: 0px solid rgb(38, 38, 38); background: url('/static/post_stalker/users/profile/design/profile.png')"
+                       align="center" border="0" cellpadding="0" cellspacing="0" height="979" width="1024px">
+                    <tr>
+
+                        <td class="name" valign="top">
+                            <span style="color: #cc9933;">{{ post_user.username }}</span> - <span
+                                style="color: #bfa56d">личный КПК [{{ post_user.id }}] </span>
+                        </td>
+
+                        <td class="ava" valign="top">
+                            <img class="mugshot" src="{{ post_user.get_avatar }}" alt="{% trans "Your mugshot" %}"/>
+                        </td>
+
+
+                        <td class="gr" valign="top">
+                            <img src="{{ post_user.get_group_icon }}" alt="{{ post_user.groups.first.name }}"
+                                 title="{{ post_user.groups.first.name }}">
+                        </td>
+                        <td class="rn" valign="top">
+                            <img src="{{ post_user.get_rank.url }}" alt="{{ post_user.get_rank.name }}"
+                                 title="{{ post_user.get_rank.name }}">
+                        </td>
+                        <td class="st" valign="top">
+                            <img src="{{ post_user.get_online.url }}" alt="{{ post_user.get_online.name }}"
+                                 title="{{ post_user.get_online.name }}">
+                        </td>
+
+                        <td class="redak" valign="top">
+                            {% if post_user.id == user.id %}
+                                [ <a href="{% url 'userena_profile_edit' post_user.username %}">Изменить данные</a> ]
+                            {% endif %}
+
+                            <div style="padding-top:4px;" id="userPMread">[ <a href="$_PM_READ_URL$">Читать ЛС (<b></b>)</a>
+                                ]
+                            </div>
+                            {% if post_user.id != user.id %}
+                                <div style="padding-top:4px;" id="userPMread">[ <a href="#"
+                                                                                   title="Отправить личное сообщение">Отправить
+                                    ЛС</a> ]
+                                </div>
+                            {% endif %}
+                        </td>
+
+                        <td class="svyz" valign="top">
+
+                            <b>E-mail:</b>
+                        </td>
+                        <td class="svyz1" valign="top">
+                            {{ post_user.email }}
+
+
+                        </td>
+
+                        <td class="isq" valign="top">
+                            <b>ICQ:</b>
+                        <td class="isq1" valign="top">
+
+                        </td>
+
+                        <td class="zvanie" valign="top">
+
+                            <b>Звание:</b>
+                        <td class="zvaniegr" valign="top">
+
+                            {{ post_user.title }}
+
+                        </td>
+
+                        <td class="arena" valign="top">
+                            <b></b>
+                        <td class="arenas" valign="top">
+
+
+                        </td>
+
+
+                        <td class="dan" valign="top">
+                            Репутация:
+                            <a title="Смотреть историю репутации"
+                               onclick="atmWnd('rep_wnd',
+                                       'История репутации',
+                                       loadReputation({{ post_user.id }}), '1')">
+                                <b><span id="user-respect">{{ post_user.respect }}</span></b>
+                            </a>
+                            <a onclick="atmWnd('add_rep_wnd',
+                                    'Изменить уровень репутации',
+                                    loadRespectForm({{ post_user.id }}), '1')">[+/-]</a>
+
+                            Замечания: &trade;
+                            <a onclick="atmWnd('banreason_wnd',
+                                    'История замечаний',
+                                    '
+                                    {% if post_user.banreason %}{{ post_user.banreason }}{% else %}Замечания отсутствуют{% endif %}', '1')"
+                               title="Смотреть историю замечаний">
+                                <b>0{% if  post_user.banreason %}+{% endif %} %</b></a>
+                            {% if post_user.first_name and post_user.last_name %}
+                                <hr><b>Имя:</b> {% if post_user.first_name %}{{ post_user.first_name }}{% endif %}
+                                {% if post_user.last_name %}{{ post_user.last_name }}{% endif %}
+                            {% endif %}
+
+                            <hr>
+                            <b>Пол:</b> {{ post_user.get_gender }}
+                            <hr>
+                            <b>Дата рождения:</b> {{ post_user.birthday }} [ <b>{{ post_user.get_age }}</b> ]
+                            <hr>
+                            <b>Город:</b> {{ post_user.state }}
+                            <hr>
+                            <b>Дата регистрации:</b> {{ post_user.date_joined }}
+                            <hr>
+                            <b>Дата входа:</b> {{ post_user.last_login }}
+
+
+                        </td>
+
+                        <td class="nagrads" valign="top">
+                            <div onclick="atmWnd('test2', 'Новое окно', '{{ post_user.banreason }}', '1')">Открыть
+                                окно
+                            </div>
+                            {#<?if($_FORUM_ENTRIES$>=50)?><img title="за 50 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/18.png"> <?endif?>#}
+                            {#<?if($_FORUM_ENTRIES$>=100)?><img title="за 100 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/11.png"><?endif?>#}
+                            {#<?if($_FORUM_ENTRIES$>=300)?><img title="за 300 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/4.png"><?endif?>#}
+                            {#<?if($_FORUM_ENTRIES$>=500)?><img title="за 500 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/14.png"><?endif?>#}
+                            {#<?if($_FORUM_ENTRIES$>=700)?><img title="за 700 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/23.png"><?endif?>#}
+                            {#<?if($_FORUM_ENTRIES$>=1000)?><img title="за 1000 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/24.png"><?endif?>#}
+                            {##}
+                            {#<?if( $_COM_ENTRIES$>15)?><img title="за 15 комментариев" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/22.png"><?endif?>#}
+                            {#<?if( $_COM_ENTRIES$>30)?><img title="за 30 комментариев" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/17.png"><?endif?>#}
+                            {#<?if( $_COM_ENTRIES$>50)?><img title="за 50 комментариев" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/10.png"><?endif?>#}
+                            {#<?if( $_COM_ENTRIES$>80)?><img title="за 80 комментариев" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/13.png"><?endif?>#}
+                            {#<?if( $_REPUTATION$>30)?><img title="за 30 репутации" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/9.png"><?endif?>#}
+                            {#<?if( $_REPUTATION$>60)?><img title="за 60 репутации" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/25.png"><?endif?>#}
+                            {#<?if( $_REPUTATION$$>100)?><img title="за 100 репутации" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/19.png"><?endif?>#}
+                            {#<?if( $_REPUTATION$$>150)?><img title="за 150 репутации" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/3.png"><?endif?>#}
+                            {##}
+                            {#<?if( $_PUBL_ENTRIES$>20)?><img title="за 200 репутации" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/7.png"> <?endif?>#}
+                            {#<?if( $_PUBL_ENTRIES$>20)?><img title="за 20 статей" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/20.png"><?endif?>#}
+                            {#<?if( $_PUBL_ENTRIES$>20)?><img title="за 70 статей" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/15.png"><?endif?>#}
+                            {#<?if( $_LOAD_ENTRIES$>20)?><img title="за 20 файлов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/6.png"><?endif?>#}
+                            {#<?if( $_LOAD_ENTRIES$>50)?><img title="за 50 файлов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/2.png"><?endif?>#}
+                            {#<?if( $_LOAD_ENTRIES$>100)?><img title="за 100 файлов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/5.png"><?endif?>#}
+                            {#<?if( $_PHOTO_ENTRIES$>30)?><img title="за 30 фото" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/16.png"><?endif?>#}
+                            {#<?if( $_PHOTO_ENTRIES$>70)?><img title="за 70 фото" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/12.png"><?endif?>#}
+                            {#<?if( $_PHOTO_ENTRIES$>115)?><img title="за 115 фото" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/26.png"><?endif?>#}
+                            {#<?if( $_PHOTO_ENTRIES$>190)?><img title="за 190 фото" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/1.png"><?endif?>#}
+                        </td>
+
+                        <td class="pda1" valign="top" width="51%"><span style="color:orange"><b>Фото:</b></span> (<b><a
+                                href="$_PHOTO_ACTIVITY_URL$" target="_self"><span style="line-height: 1.6;">$_PHOTO_ENTRIES$</span></a></b>)
+                        </td>
+                        <td class="pda2" valign="top" width="49%"><span style="color:orange"><b>Посты:</b></span> (<b><a
+                                href="$_FORUM_ACTIVITY_URL$" target="_self"><span style="line-height: 1.6;">$_FORUM_ENTRIES$</span></a></b>)
+                        </td>
+                        <td class="pda3" valign="top" width="51%"><span style="color:orange"><b>Статьи:</b></span>
+                            (<b><a href="$_PUBL_ACTIVITY_URL$" target="_self"><span style="line-height: 1.6;">$_PUBL_ENTRIES$</span></a></b>)
+                        </td>
+                        <td class="pda4" valign="top" width="49%"><span style="color:orange"><b>Файлы:</b></span> (<b><a
+                                href="$_LOAD_ACTIVITY_URL$" target="_self"><span style="line-height: 1.6;">$_LOAD_ENTRIES$</span></a></b>)
+                        </td>
+
+                        <td class="pda5" valign="top" width="40%"><span style="color:orange"><b>Новости:</b></span> (<b><a
+                                href="$_NEWS_ACTIVITY_URL$" target="_self"><span style="line-height: 1.6;">$_NEWS_ENTRIES$</span></a></b>)
+                        </td>
+                        <td class="pda6" valign="top" width="60%"><span
+                                style="color:orange"><b>Ответов:</b></span>(<b><a href="$_COM_ACTIVITY_URL$"
+                                                                                  target="_self"><span
+                                style="line-height: 1.6;">$_COM_ENTRIES$</span></a></b>)
+                        </td>
+                        <td class="pda7" valign="top" width="40%"><span style="color:orange"><b>ДФ:</b>
+    <b>[<a href="javascript://" onclick="money_ed('$_USER_ID$')">±</a>]</b>
+
+
+</span>
+                        </td>
+
+
+                        </td>
+                        <td class="pda8" valign="top" width="60%"><span style="color:orange"><b>Награды:</b></span> (<b><a
+                                href="$AWARDS_READ_URL$"
+                                title="Список наград">$AWARDS$</a></b>)</a> <?if($AWARDS_DO_URL$)?>[<a
+                                href="$AWARDS_DO_URL$">+</a>]<?endif?></td>
+                        <td class="s1" valign="top">
+                            <div class="wpn_1" align="center"></div>
+                        </td>
+
+                        <td class="s2" valign="top">
+                            <div class="wpn_2" align="center"></div>
+                        </td>
+
+                        <td class="s3" valign="top">
+                            <div class="equip" align="center"></div>
+                        </td>
+
+
+                        <td class="pat1" valign="top">
+
+                            <div class="grenade" align="center"></div>
+                        </td>
+
+                        <td class="pat2" valign="top">
+
+                            <div class="detector" align="center"></div>
+                        </td>
+                        <td class="pat3" valign="top">
+
+                            <div class="medkit" align="center"></div>
+                        </td>
+
+
+                    </tr>
+                </table>
+
+                <table style="border: 0px solid rgb(38, 38, 38); background: url('/static/post_stalker/users/profile/design/podpis-.png')"
+                       align="center" border="0" cellpadding="0" cellspacing="0" height="227" width="1024px">
+                    <tr>
+                        <td>
+                            {% if post_user.signature %}
+                                <div align="center">{{ post_user.signature|safe }}</div></td>
+                            {% endif %}
+                    </tr>
+                </table>
+            </div>
+
+            <div id="gryp" class="tab_content">
+                <table style="border: 0px solid rgb(38, 38, 38); background: url('/static/post_stalker/users/profile/design/stranica.png')"
+                       align="center" border="0" cellpadding="0" cellspacing="0" height="1190" width="1024px">
+                    <tr>
+
+                        <td style="padding-left:15px;padding-top:30px;padding-right:0px;" valign="top">
+                            <table align="center" border="0" cellpadding="0" cellspacing="0" height="1190"
+                                   width="1024px"
+                                   style="color: rgb(120, 134, 107); font-family: verdana, arial, helvetica; font-size: 10px; border: 0px solid rgb(38, 38, 38); background-image: url(http://post-stalker.com/static/post_stalker/users/profile/design/menu/stranica.png);">
+                                <tbody>
+                                <tr>
+                                    <td valign="top" style="padding-left: 15px; padding-top: 30px; padding-right: 0px;">
+                                        <div id="content-r"><img src="http://post-stalker.com/design/grupp/6.gif"
+                                                                 title="Миру Чистое Небо!" align="left">Группировка:
+                                            Чистое небо (Лидер группировки: Маркс)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/9.png"><br><br><img
+                                                    src="http://post-stalker.com/design/grupp/8.gif"
+                                                    title="Криминальные сталкеры." align="left">Группировка: Бандиты
+                                            (Лидер группировки: Мышка)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/8.png"><br><br><img
+                                                    src="http://post-stalker.com/design/grupp/3.gif"
+                                                    title="Вольные сталкеры - вольная жизнь." align="left">Группировка:
+                                            Вольные Сталкеры (Лидер группировки: Пустельга)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/6.png"><br><br><img
+                                                    src="http://post-stalker.com/design/grupp/1.gif"
+                                                    title="Потеря рейтинга за баны соклановцев" align="left">Группировка:
+                                            Свобода (Лидер группировки: Автор)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/4.png"><br><br><img
+                                                    src="http://post-stalker.com/design/grupp/4.gif"
+                                                    title="Военные против Зоны." align="left">Группировка: Военные
+                                            Сталкеры (Лидер группировки: стрингер)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/4.png"><br><br><img
+                                                    src="http://post-stalker.com/design/grupp/2.gif"
+                                                    title="Защитим мир от заразы Зоны!" align="left">Группировка: Долг
+                                            (Лидер группировки: Сухой)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/2.png"><br><br><img
+                                                    src="http://post-stalker.com/design/grupp/7.gif"
+                                                    title="Сталкеры - Наёмники." align="left">Группировка: Наёмники
+                                            (Лидер группировки: METALLIX)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/2.png"><br><br><img
+                                                    src="http://post-stalker.com/design/grupp/5.gif"
+                                                    title="Сталкеры поклоняющиеся Монолиту." align="left">Группировка:
+                                            Монолит (Лидер группировки: Вандан)<br><img
+                                                    src="http://post-stalker.com/dlia_Foruma/Reit/1.png"><br></div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="rul" class="tab_content">
+                <table style="border: 0px solid rgb(38, 38, 38); background: url('/static/post_stalker/users/profile/design/stranica.png')"
+                       align="center" border="0" cellpadding="0" cellspacing="0" height="1190" width="1024px">
+                    <tr>
+                        <td style="padding-left:15px;padding-top:30px;padding-right:25px;" valign="top">
+                            <b>
+                                <center>ПРАВИЛА НАШЕГО САЙТА</center>
+                            </b><br><br><i><b>1)Регистрация</b></i><br>Нельзя:<br>* Регистрироваться с бессмысленными
+                            никами (вроде cbndg437), никами содержащими более 4 цифр и спецсимволов;<br>* Ники состоящие
+                            из одних только согласных или гласных букв;<br>* Использовать в нике нецензурные слова,
+                            адреса сайтов, адреса e-mail и т.п.;<br>* Повторная регистрация (регистрация двух и более
+                            аккаунтов);<br>* Регистрация похожего ника (до степени смешения) на существующий. Нарушители
+                            будут выявляться, и блокироваться!<br><br><i><b>2)Правила
+                            мини-чата</b></i><br>Запрещается:<br>* Любое проявление неуважения (особенно игнорирование
+                            требований) или критики в адрес Администрации. <br>* Оскорблять, унижать, дискриминировать
+                            посетителей чата по полу, возрасту, социальному положению, индивидуальным предпочтениям
+                            (Своё недовольство другим пользователем можно выразить нейтральными словами или в приватной
+                            форме - ЛС).<br>* Использование нецензурных выражений и ненормативной лексики.<br>*
+                            Заниматься пропагандой насилия, наркотиков, расовой и национальной розни.<br>* Реклама
+                            других Интернет-ресурсов, без разрешения на это Администрации.<br>* Засорять окно чата
+                            бессмысленными или часто повторяющимися фразами и набором символов.<br>* Злоупотреблять
+                            использование БОЛЬШИХ БУКВ (CAPS LOCK).<br>* Обнародовать в общем разговоре чужие IP адреса,
+                            телефоны, адреса и т.п., без разрешения их владельца.<br>* Выносить в чат обсуждения тем за
+                            пределы отведенных для этого мест.<br>* Искажать ники пользователей.<br><br><i><b>3) Правила
+                            форума!</b></i><br>Запрещается:<br>* Создание сообщений, содержащих рекламу (в том числе в
+                            ссылках и подписях), заведомо ложнyю инфоpмацию, гpубые, нецензурные выражения, как в явном,
+                            так и неявном виде. Провокации жесткого флейма, экстремистские заявления, а также
+                            высказывания, призванные принизить или оскорбить группы людей или отдельных личностей.
+                            Сообщения, призванные намеренно ввести пользователей в заблуждение или нанести им ущерб.
+                            Сообщения, единственной целью которых является Увелечение количества постов (флуд).<br>*Создание
+                            тем, сообщений, которые искажают внешний вид форума, а также злоупотребление визуальным
+                            оформлением сообщений и подписи (яркие цвета, крупные шрифты, бессмысленные картинки, обилие
+                            смайликов).<br>* Преднамеренное искажение слов, замена букв на похожие по написанию символы
+                            и буквы других языков. Преднамеренное нарушение правил русского языка, а также
+                            злоупотребление падонковским слэнгом. Пожалуйста, воздержитесь от написания сообщений
+                            транслитом. Если у вас проблемы с раскладкой - попробуйте воспользоваться сервисами,
+                            подобными translit.ru.<br>*На форуме категорически запрещено самомодерирование - это когда
+                            некий участник форума, не являющийся модератором данного форума, делает замечания другим
+                            участникам и/или дает советы о том, что тема исчерпана, ее нужно закрыть, перенести, удалить
+                            и т.д. Делать замечания, открывать и закрывать темы - прерогатива только модераторов и
+                            администрации.<br><br><i><b>4)Размещение фотографий, файлов, статей и комментарии к ним:</b></i><br>*Запрещено
+                            выкладывать повторно одну и ту же картинку, статью, файл.<br>*Запрещено флудить в
+                            комментариях. Начинать флейм.<br>*Размещаемый материал не должен нарушать авторские
+                            права.<br><br><i><b>Меры принимаемые Администрации к нарушителям:</b></i><br>Администратор
+                            вправе заблокировать доступ к отдельным частям сайта или ко всему сайту участникам,
+                            систематически нарушающим вышеперечисленные правила. В случае отсутствия возможности
+                            выборочной блокировки отдельных лиц администратор может заблокировать доступ из подсети, в
+                            которой работает нарушитель, или целой зоны.
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="kanal" class="tab_content">
+                <table style="border: 0px solid rgb(38, 38, 38); background: url('/static/post_stalker/users/profile/design/stranica.png')"
+                       align="center" border="0" cellpadding="0" cellspacing="0" height="1190" width="1024px">
+                    <tr>
+                        <td style="padding-left:15px;padding-top:30px;padding-right:30px;" valign="top">
+                            <ul id="news">
+                                <p>
+                                    <img src="http://gsc-stalker.ru/ekippirovka/pda/icon/ui_iconstotal54.png"
+                                         align="left" border="0">Вступай в "Свободу"! Только здесь тебя оценят и примут
+                                    как родного! Никакого обязалова и идеологической пурги, никаких утренних по будок и
+                                    минимум сухого закона! Если ты настоящий сталкер и хочешь быть среди таких же как
+                                    сам, вливайся в наши ряды, время вливания любое, принимаем без перерывов и выходных,
+                                    ежедневно и еженочно, Свобода приветствует всех кого привели к нам дороги Зоны.
+
+                                </p>
+                                <p>
+                                    <img src="http://gsc-stalker.ru/ekippirovka/pda/icon/ui_iconstotal53.png"
+                                         align="left" border="0">люди, в оптике сместилась линза. Что делать? В морг?
+                                    Или техник исправит?
+                                </p>
+                                <p>
+                                    <img src="http://gsc-stalker.ru/ekippirovka/pda/icon/ui_iconstotal7.png"
+                                         align="left" border="0">"Если ты хочешь быть лучшим из лучших, если тебе
+                                    надоело находиться в Зоне Отчуждения нелегально подпиши контракт на службу в Военных
+                                    сталкерах. У нас ты получишь лучшие образцы оружия и снаряжения. Стань одним из нас,
+                                    перед тобой откроются все неизведанные тайны и дороги Зоны."
+                                </p>
+                            </ul>
+                            <br><br><br><br><br>
+                            <link type="text/css" rel="StyleSheet" href="http://post-stalker.com/chat-styles.css"/>
+                            $CHAT_BOX$
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    </body>
+    </html>
+    <html lang="">
+    <head>
+        <title>Профиль {{ post_user.username }}</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <h2>{{ post_user.username }} {% if post_user.get_full_name %}({{ post_user.get_full_name }}){% endif %}</h2>
+    <div class="white-box">
+        {% block profile_navigation %}
+            {# Dirty hack. Will use django-guardian in the future. #}
+            {% if post_user.username == post_user.username %}
+                <ul id="box-nav">
+                    {% block profile_navigation_items %}
+                        <li>
+                            <a href="{% url 'userena_profile_detail' post_user.username %}">{% trans "View profile" %}</a>
+                        </li>
+                        <li><a href="{% url 'userena_profile_edit' post_user.username %}">{% trans "Edit details" %}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'userena_password_change' post_user.username %}">{% trans "Change password" %}</a>
+                        </li>
+                        <li><a href="{% url 'userena_email_change' post_user.username %}">{% trans "Change email" %}</a>
+                        </li>
+                    {% endblock %}
+                </ul>
+            {% endif %}
+        {% endblock %}
+
+        <div id="details">
+            <img class="mugshot" src="{{ post_user.get_avatar }}" alt="{% trans "Your mugshot" %}"/>
+
+
+            {% if not post_user.is_online %}
+                {{ post_user.last_login }}
+            {% endif %}
+            <dl>
+                {% block profile_definition_list %}
+                    {% if post_user.get_full_name %}
+                        <dt>{% trans "Name" %}</dt>
+                        <dd>{{ post_user.get_full_name }}</dd>
+                    {% endif %}
+
+                    {% if post_user.email and not hide_email %}
+                        <dt>{% trans "Email" %}</dt>
+                        <dd>{{ post_user.email }}</dd>
+                    {% endif %}
+                    {% if profile.age %}
+                        <dt>{% trans "Age" %}</dt>
+                        <dd>{{ profile.age }}</dd>
+                    {% endif %}
+                    {% if profile.website %}
+                        <dt>{% trans "Website" %}</dt>
+                        <dd>{{ profile.website|urlize }}</dd>
+                    {% endif %}
+                    {% if profile.location %}
+                        <dt>{% trans "Location" %}</dt>
+                        <dd>{{ profile.location }}</dd>
+                    {% endif %}
+                    {% if profile.about_me %}
+                        <dt>{% trans "About me" %}</dt>
+                        <dd>{{ profile.about_me }}</dd>
+                    {% endif %}
+                {% endblock %}
+            </dl>
+
+        </div>
+    </div>
+
+{% endwith %}
+
+</body>
+</html>

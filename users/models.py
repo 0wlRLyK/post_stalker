@@ -1,6 +1,14 @@
-from django.db import models
-from django.contrib.auth.models import AbstractUser
+import datetime
+
 from ckeditor.fields import RichTextField
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.core.cache import cache
+from django.db import models
+from django.utils.translation import gettext as _
+from userena.models import UserenaBaseProfile
+
+from users.online_users.models import OnlineUserActivity
 
 
 def upload_to_item(instance, filename):
@@ -74,3 +82,145 @@ class User(AbstractUser):
     upgrade1 = models.ManyToManyField(InventoryItem, blank=True, related_name="user_upgr1")
     upgrade2 = models.ManyToManyField(InventoryItem, blank=True, related_name="user_upgr2")
     upgrade3 = models.ManyToManyField(InventoryItem, blank=True, related_name="user_upgr3")
+    is_online = models.BooleanField(default=False)
+
+    def last_seen(self):
+        return cache.get('seen_%s' % self.username)
+
+    def online(self):
+        if self.last_seen():
+            now = datetime.datetime.now()
+            if now > self.last_seen() + datetime.timedelta(
+                    seconds=settings.USER_ONLINE_TIMEOUT):
+                return False
+            else:
+                return True
+        else:
+            return False
+
+    def get_avatar(self):
+        if self.avatar:
+            return self.avatar.url
+        else:
+            return "/media/post_st/ava/avatar.png"
+
+    def get_group_icon(self):
+        if self.is_authenticated:
+            group = self.groups.first()
+            if group:
+                return "/static/post_stalker/users/groups/{}.gif".format(group.id)
+            else:
+                return "/static/post_stalker/users/groups/1.gif"
+        return "/static/post_stalker/users/groups/0.gif"
+
+    def get_rank(self):
+        if self.rank < 50:
+            return {
+                "name": "Новичок",
+                "url": "/static/post_stalker/users/ranks/rank1.gif"
+            }
+        elif self.rank < 100:
+            return {
+                "name": "Просвещённый",
+                "url": "/static/post_stalker/users/ranks/rank2.gif"
+            }
+        elif self.rank < 100:
+            return {
+                "name": "Опытный",
+                "url": "/static/post_stalker/users/ranks/rank3.gif"
+            }
+        elif self.rank < 250:
+            return {
+                "name": "Бывалый",
+                "url": "/static/post_stalker/users/ranks/rank4.gif"
+            }
+        elif self.rank < 300:
+            return {
+                "name": "Профессионал",
+                "url": "/static/post_stalker/users/ranks/rank5.gif"
+            }
+        elif self.rank < 500:
+            return {
+                "name": "Помеченный зоной",
+                "url": "/static/post_stalker/users/ranks/rank6.gif"
+            }
+        elif self.rank < 700:
+            return {
+                "name": "Мастер",
+                "url": "/static/post_stalker/users/ranks/rank7.gif"
+            }
+        elif self.rank < 800:
+            return {
+                "name": "Чёрный Сталкер",
+                "url": "/static/post_stalker/users/ranks/rank8.gif"
+            }
+        elif self.rank < 1000:
+            return {
+                "name": "Призрак Зоны",
+                "url": "/static/post_stalker/users/ranks/rank9.gif"
+            }
+        elif self.rank > 1000:
+            return {
+                "name": "Легенда Зоны",
+                "url": "/static/post_stalker/users/ranks/rank10.gif"
+            }
+
+    def get_online(self):
+        if OnlineUserActivity.check_user_online(user=self):
+            return {
+                "name": "",
+                "url": "/static/post_stalker/users/v_zone.gif"
+            }
+
+        return {
+            "name": "",
+            "url": "/static/post_stalker/users/vne_zony.gif"
+        }
+
+    def get_gender(self):
+        genders = ("Сталкерша", "Сталкер")
+        return genders[self.gender]
+
+    def get_age(self):
+        today = datetime.date.today()
+        born = self.birthday
+        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+
+class UserProfile(UserenaBaseProfile):
+    user = models.OneToOneField(User,
+                                unique=True,
+                                verbose_name=_('user'),
+                                related_name='my_profile',
+                                on_delete=models.CASCADE)
+
+
+class Reputation(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Получатель", related_name="from_rep",
+                                  null=True)
+    to_user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Отправитель", related_name="to_rep",
+                                null=True)
+    value = models.SmallIntegerField(default=0, verbose_name="Значение")
+    add_datetime = models.DateTimeField(auto_now_add=True, verbose_name="Время и дата добавления")
+    subject = models.TextField(verbose_name="Причина изменения репутации", null=True)
+    message = models.TextField(verbose_name="Текст сообщения", blank=True, null=True)
+
+    def get_level(self):
+        if self.value < 0:
+            return {"ico": "minus.svg",
+                    "sign": "-",
+                    "text": "Уровень понижен"}
+        elif self.value > 0:
+            return {"ico": "plus.svg",
+                    "sign": "+",
+                    "text": "Уровень повышен"}
+        return {"ico": "bulb.svg",
+                "sign": "",
+                "text": "Уровень репутации не изменен"}
+
+    def __str__(self):
+        return self.subject
+
+    class Meta:
+        verbose_name = "Ед. репутации"
+        verbose_name_plural = "Репутация"

@@ -12,6 +12,9 @@ requests = "*"
 pysolr = "*"
 pillow = "*"
 django-ckeditor = "*"
+django-userena-ce = "*"
+django-guardian = "*"
+easy-thumbnails = "*"
 
 [dev-packages]
 

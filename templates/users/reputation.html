@@ -1,0 +1,49 @@
+<section id="user_reputation" data-current="{{ page_obj.number }}" data-total="{{ page_obj.paginator.num_pages }}">
+    <span>Репутация <i>{{ user }}</i>: <strong>{{ user.respect }}</strong></span>
+    <hr>
+    <div id="user_reputation_page">
+        {% for rep in object_list %}
+            <div class="u-rep-history-item">
+                <div class="flex-justify-between">
+                    <div title="{{ rep.get_level.text }} [{{ rep.get_level.sign }}{{ rep.value }}]"
+                         style="width:16px;height:17px;float:left;background: url('/static/post_stalker/ico/{{ rep.get_level.ico }}') no-repeat 0 0; background-size: contain;">
+                    </div>
+                    <span class="u-rep-author"><a class="banHUser"
+                                                  href="{% url "userena_profile_detail" rep.from_user %}"
+                                                  target="_blank">
+                <b>{{ rep.from_user }}</b>
+            </a></span>
+                    <span class="u-rep-date">{{ rep.add_datetime }}</span>
+                </div>
+                <div class="u-rep-subj">{{ rep.subject }}</div>
+                <div>
+                    {% if rep.message %}
+                        <span><b>Ответ</b>: </span>
+                        <i><span><i>{{ rep.message }}</i></span></i>
+                    {% endif %}
+                </div>
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+    <div id="paginate"></div>
+</section>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next &raquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+
+        {% endif %}
+    </span>
+</div>

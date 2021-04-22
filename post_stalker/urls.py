@@ -21,7 +21,10 @@ from machina import urls as machina_urls
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('forum/', include(machina_urls)),
-] + static(settings.STATIC_URL, docuent_root=settings.STATICFILES_DIRS)
+                  path('admin/', admin.site.urls),
+                  path('forum/', include(machina_urls)),
+                  path('users/', include('userena.urls')),
+                  path('users/funcs/', include('users.urls')),
+
+              ] + static(settings.STATIC_URL, docuent_root=settings.STATICFILES_DIRS)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
