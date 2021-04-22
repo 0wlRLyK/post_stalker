@@ -1,0 +1,43 @@
+<section id="user_transactions" data-current="{{ page_obj.number }}" data-total="{{ page_obj.paginator.num_pages }}">
+    <span>Баланс пользователя <i>{{ user }}</i>:
+        <strong><span id="wnd_user_currency">{{ user.money }}</span></strong></span><br>
+    <span>Ваш баланс: <strong><span id="wnd_my_currency">{{ user_money }}</span></strong></span><br>
+    <hr>
+    <div id="user_transactions_page">
+        {% for money in object_list %}
+            <div class="u-rep-history-item">
+                <div class="flex-justify-between">
+                    <span class="u-rep-author"><a class="banHUser"
+                                                  href="{% url "userena_profile_detail" money.from_user %}"
+                                                  target="_blank">
+                <b>{{ money.from_user }}</b>
+            </a></span>
+                    <span class="transact_value {{ money.get_range.class }}">{{ money.get_range.sign }}{{ money.value }} ДФ</span>
+                    <span class="u-rep-date">{{ money.add_datetime }}</span>
+                </div>
+                <div class="u-rep-subj">{{ money.message }}</div>
+                <hr>
+            </div>
+        {% endfor %}
+    </div>
+    <div id="paginate_transactions"></div>
+</section>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next &raquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+
+        {% endif %}
+    </span>
+</div>

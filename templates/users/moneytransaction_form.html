@@ -1,0 +1,9 @@
+<section id="money_transfer">
+    <h5 style="color: red; text-align: center" id="transfer_fall"></h5>
+    <span>Ваш баланс: <strong><span id="wnd_my_currency_transfer" data-money="{{ user_money }}">{{ user_money }}</span></strong></span><br>
+    <form method="post" id="money_transfer_form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+</section>

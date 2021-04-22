@@ -70,6 +70,7 @@ class User(AbstractUser):
     rank = models.IntegerField(default=0, blank=True)
     respect = models.SmallIntegerField(default=0, verbose_name="Репутация", blank=True)
     banreason = models.TextField(verbose_name="Причины блокировки", default="", blank=True, null=True)
+    money = models.PositiveIntegerField(default=1000, verbose_name="Деньги форума")
 
     slot1 = models.ForeignKey(EquipItem, blank=True, null=True, on_delete=models.SET_NULL, related_name="uslot1")
     slot2 = models.ForeignKey(EquipItem, blank=True, null=True, on_delete=models.SET_NULL, related_name="uslot2")
@@ -224,3 +225,32 @@ class Reputation(models.Model):
     class Meta:
         verbose_name = "Ед. репутации"
         verbose_name_plural = "Репутация"
+
+
+class MoneyTransaction(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Получатель",
+                                  related_name="from_transaction",
+                                  null=True)
+    to_user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Отправитель",
+                                related_name="to_transaction",
+                                null=True)
+    value = models.PositiveIntegerField(default=0, verbose_name="Значение")
+    add_datetime = models.DateTimeField(auto_now_add=True, verbose_name="Время и дата добавления")
+    message = models.TextField(verbose_name="Комментарий перевода", blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.from_user.username}>>{self.to_user.username}:{self.value} - {self.message}'
+
+    def get_range(self):
+        if self.value > 0:
+            return {"sign": "+",
+                    "class": "positive"}
+        elif self.value < 0:
+            return {"sign": "-",
+                    "class": "negative"}
+        return {"sign": "",
+                "class": "null"}
+
+    class Meta:
+        verbose_name = "Денежный перевод"
+        verbose_name_plural = "Денежные переводы"
