@@ -1,0 +1,43 @@
+{% load static %}
+<section id="img_color_select">
+    <style>
+        .label_full_w {
+            width: 100%;
+            display: block;
+        }
+    </style>
+    <h3>В данном меню можно сменить иконку и цвет никнейма в чате</h3>
+    <h5 style="text-align: center;color: red;" id="img_color_cause"></h5><br>
+    <form method="post" id="img_color_select_form">
+        {% csrf_token %}
+        <label class="label_full_w">
+            Иконки:
+            <span style="float: right"><i>Цена</i>
+                <strong>{{ settings.ico_price }}</strong>
+            </span>
+        </label>
+        <hr>
+        {% for choice in form.ico %}
+            <span class="radio">{{ choice.tag }}</span>
+            <img src="{{ choice.choice_label }}" alt="">
+        {% endfor %}<br>
+        <label class="label_full_w">
+            Цвета никнейма:
+            <span style="float: right"><i>Цена</i>
+                <strong>{{ settings.color_price }}</strong>
+            </span>
+        </label>
+        {% for choice in form.color %}
+
+            <span class="radio">{{ choice.tag }}</span>
+            <span style="color: {{ choice.choice_label }}">{{ user.username }}</span>
+        {% endfor %}
+        <br>
+        <input type="button"
+               onclick="$('input[name=\'ico\']').prop('checked', false);
+                $('input[name=\'color\']').prop('checked', false);"
+               value="Сбросить все"/> |
+
+        <input type="submit" value="Submit">
+    </form>
+</section>

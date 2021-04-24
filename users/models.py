@@ -1,14 +1,36 @@
 import datetime
+import re
 
 from ckeditor.fields import RichTextField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres import fields
 from django.core.cache import cache
 from django.db import models
 from django.utils.translation import gettext as _
 from userena.models import UserenaBaseProfile
 
 from users.online_users.models import OnlineUserActivity
+from utils.models import SingletonModel
+
+
+class UserSettings(SingletonModel):
+    respect_pagination = models.PositiveSmallIntegerField(default=15,
+                                                          verbose_name="Колличество записей изменения репутации на странице")
+    transact_pagination = models.PositiveSmallIntegerField(default=15,
+                                                           verbose_name="Колличетсво транзакций на странице")
+    ico_range_numbers = fields.IntegerRangeField(verbose_name="Диапазон пользовательских иконок чата", null=True)
+
+    nik_price = models.PositiveSmallIntegerField(default=500, verbose_name="Цена смена ника")
+    chat_ico_price = models.PositiveSmallIntegerField(default=500, verbose_name="Цена смены иконки чата")
+    chat_color_price = models.PositiveSmallIntegerField(default=300, verbose_name="Цена смены цвета чата")
+
+    def __str__(self):
+        return "Настройки"
+
+    class Meta:
+        verbose_name = "!Настройки модуля пользователей"
+        verbose_name_plural = "!Настройки модуля пользователей"
 
 
 def upload_to_item(instance, filename):
@@ -71,6 +93,9 @@ class User(AbstractUser):
     respect = models.SmallIntegerField(default=0, verbose_name="Репутация", blank=True)
     banreason = models.TextField(verbose_name="Причины блокировки", default="", blank=True, null=True)
     money = models.PositiveIntegerField(default=1000, verbose_name="Деньги форума")
+    status = models.CharField(max_length=50, default="", verbose_name="Статус пользователя")
+    ico_num = models.PositiveSmallIntegerField(default=1, verbose_name="Номер иконки")
+    chat_color = models.CharField(max_length=10, verbose_name="Цвет", null=True, blank=True)
 
     slot1 = models.ForeignKey(EquipItem, blank=True, null=True, on_delete=models.SET_NULL, related_name="uslot1")
     slot2 = models.ForeignKey(EquipItem, blank=True, null=True, on_delete=models.SET_NULL, related_name="uslot2")
@@ -83,7 +108,12 @@ class User(AbstractUser):
     upgrade1 = models.ManyToManyField(InventoryItem, blank=True, related_name="user_upgr1")
     upgrade2 = models.ManyToManyField(InventoryItem, blank=True, related_name="user_upgr2")
     upgrade3 = models.ManyToManyField(InventoryItem, blank=True, related_name="user_upgr3")
-    is_online = models.BooleanField(default=False)
+
+    def valid_username(self):
+        return bool(re.match(r'^[\w.@+-]+\Z', self.username))
+
+    valid_username.allow_tags = True
+    valid_username.short_description = "Validation"
 
     def last_seen(self):
         return cache.get('seen_%s' % self.username)
@@ -234,7 +264,7 @@ class MoneyTransaction(models.Model):
     to_user = models.ForeignKey(User, on_delete=models.SET_NULL, verbose_name="Отправитель",
                                 related_name="to_transaction",
                                 null=True)
-    value = models.PositiveIntegerField(default=0, verbose_name="Значение")
+    value = models.IntegerField(default=0, verbose_name="Значение")
     add_datetime = models.DateTimeField(auto_now_add=True, verbose_name="Время и дата добавления")
     message = models.TextField(verbose_name="Комментарий перевода", blank=True, null=True)
 
@@ -246,7 +276,7 @@ class MoneyTransaction(models.Model):
             return {"sign": "+",
                     "class": "positive"}
         elif self.value < 0:
-            return {"sign": "-",
+            return {"sign": "",
                     "class": "negative"}
         return {"sign": "",
                 "class": "null"}
@@ -254,3 +284,18 @@ class MoneyTransaction(models.Model):
     class Meta:
         verbose_name = "Денежный перевод"
         verbose_name_plural = "Денежные переводы"
+
+    class SingletonModel(models.Model):
+        class Meta:
+            abstract = True
+
+        def save(self, *args, **kwargs):
+            self.__class__.objects.exclude(id=self.id).delete()
+            super().save(*args, **kwargs)
+
+        @classmethod
+        def load(cls):
+            try:
+                return cls.objects.get()
+            except cls.DoesNotExist:
+                return cls()

@@ -6,7 +6,11 @@ app_name = "users"
 urlpatterns = [
     path("rep/<int:pk>/", u_views.ReputationDetailView.as_view(), name="user_reputation"),
     path("add/rep/<int:user_id>/", u_views.ReputationCreateView.as_view(), name="user_reputation_add"),
+
     path("money/<int:pk>/", u_views.TransactionDetailView.as_view(), name="user_money"),
     path("transfer/money/<int:user_id>/", u_views.TransactionCreateView.as_view(), name="user_money_transfer"),
+
+    path("img_select/", u_views.SelectChatImageView.as_view(), name="img_select"),
+    path("status_set/", u_views.ChangeStatusView.as_view(), name="set_status"),
 
 ]

@@ -1,0 +1,8 @@
+<section id="status_change">
+    <h5 style="text-align: center;color: red;" id="status_cause"></h5><br>
+    <form method="post" id="status_change_form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+</section>

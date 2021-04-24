@@ -7,11 +7,14 @@
         {% for money in object_list %}
             <div class="u-rep-history-item">
                 <div class="flex-justify-between">
-                    <span class="u-rep-author"><a class="banHUser"
-                                                  href="{% url "userena_profile_detail" money.from_user %}"
-                                                  target="_blank">
+                    {% if money.from_user %}
+                        <span class="u-rep-author"><a class="banHUser"
+                                                      href="{% url "userena_profile_detail" money.from_user %}"
+                                                      target="_blank">
                 <b>{{ money.from_user }}</b>
             </a></span>
+                    {% endif %}
+
                     <span class="transact_value {{ money.get_range.class }}">{{ money.get_range.sign }}{{ money.value }} ДФ</span>
                     <span class="u-rep-date">{{ money.add_datetime }}</span>
                 </div>
