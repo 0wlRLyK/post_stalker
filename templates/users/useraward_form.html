@@ -1,0 +1,48 @@
+<section id="add_award">
+    <style>
+        .award_itm_img {
+            width: 55px;
+            height: 55px;
+            background-size: contain;
+            float: left;
+            margin: 7px;
+        }
+
+        #add_award_form {
+            float: none;
+        }
+    </style>
+    <h5 style="color: red; text-align: center" id="award_add_fall"></h5>
+    <div id="award_view"></div>
+    <form method="post" id="add_award_form">
+        {% csrf_token %}
+        <p>
+            <label for="{{ form.award.name }}">
+                {{ form.award.label }}
+                <select name="{{ form.award.name }}" id="{{ form.award.id_for_label }}" required>
+                    {% for choice in form.award.field.choices %}
+                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </p>
+        <p>
+            <label for="{{ form.message.name }}">
+                {{ form.message }}
+            </label>
+        </p>
+        <input type="submit" value="Добавить">
+    </form>
+    <div id="awards_list" style="display: none">
+
+        {% for award in awards %}
+            <div id="award{{ award.id }}" style="width: 100%; float: none;">
+                <div class="award_itm_img" style="background-image: url('{{ award.icon.url }}'); display: none;"></div>
+                <h5>{{ award.name }}</h5>
+                <p>{{ award.description }}</p>
+            </div>
+        {% endfor %}
+
+
+    </div>
+</section>

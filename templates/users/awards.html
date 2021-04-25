@@ -1,0 +1,91 @@
+<style>
+    .award_item {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        border: #9dd02b 3px solid;
+        margin: 5px 0;
+        border-radius: 5px;
+    }
+
+    .aw_img {
+        position: relative;
+        width: 15%;
+        display: flex;
+        flex-shrink: unset;
+        align-content: center;
+        justify-content: center;
+    }
+
+    .aw_img img {
+        max-height: 200px;
+    }
+
+    .aw_descr {
+        position: relative;
+        display: block;
+        width: 85%;
+    }
+
+    .aw_descr h4 {
+        line-height: 0;
+        margin: 1em 0;
+    }
+</style>
+<section id="user_awards" data-current="{{ page_obj.number }}" data-total="{{ page_obj.paginator.num_pages }}">
+    <span>Награды пользователя <i>{{ user }}</i>: <strong>{{ user.get_awards_count }}</strong></span>
+    <hr>
+    <div id="user_awards_page">
+        {% for award in object_list %}
+            <div class="award_item">
+                <div class="aw_img">
+                    <img src="{{ award.award.icon.url }}" alt="">
+                </div>
+                <div class="aw_descr">
+                    <h4>{{ award.award.name }}</h4>
+                    <p>
+                <span>
+                    <a class="banHUser" href="{% url "userena_profile_detail" award.author %}" target="_blank">
+                        <b>{{ award.author }}</b>
+                    </a></span>
+                        <span style="float:right;">{{ award.create_datetime }}</span>
+                    </p>
+                    <hr>
+                    <p>{{ award.award.description }}</p>
+                    {% if award.message != award.award.name %}
+                        <p><i>{{ award.message }}</i></p>
+                    {% endif %}
+
+                </div>
+            </div>
+
+
+        {% endfor %}
+    </div>
+    <div class="pagination">
+        <ul>
+            {% if page_obj.has_previous %}
+                <a href="{% url "users:user_awards" user.id %}?page=1">
+                    <li>&laquo;</li>
+                </a>
+                <a href="{% url "users:user_awards" user.id %}?page={{ page_obj.previous_page_number }}">
+                    <li>{{ page_obj.previous_page_number }}</li>
+                </a>
+            {% endif %}
+            <a class="is-active" href="{% url "users:user_awards" user.id %}?page={{ page_obj.number }}">
+                <li>{{ page_obj.number }}</li>
+            </a>
+            {% if page_obj.has_next %}
+                <a href="{% url "users:user_awards" user.id %}?page={{ page_obj.next_page_number }}">
+                    <li>{{ page_obj.next_page_number }}</li>
+                </a>
+                <a href="{% url "users:user_awards" user.id %}?page={{ page_obj.paginator.num_pages }}">
+                    <li>&raquo;</li>
+                </a>
+            {% endif %}
+        </ul>
+    </div>
+    </sections>

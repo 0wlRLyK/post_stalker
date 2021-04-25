@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.db.utils import ProgrammingError
 from django.utils.translation import gettext_lazy as _
 
-from users.models import User, UserSettings
+from users.models import User, UserSettings, Award
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 
@@ -30,6 +30,11 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+
+
+@admin.register(Award)
+class AwardAdmin(admin.ModelAdmin):
+    list_display = ["name", "description", "id", "icon_admin"]
 
 
 @admin.register(UserSettings)

@@ -45,3 +45,7 @@ class ChoiceImageColorForm(forms.Form):
 
 class SetStatus(forms.Form):
     status = forms.CharField(max_length=50, label="Новый статус: ")
+
+
+class ChangeUsernameForm(forms.Form):
+    new_username = forms.CharField(max_length=150, required=True)

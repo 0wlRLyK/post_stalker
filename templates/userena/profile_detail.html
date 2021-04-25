@@ -63,8 +63,17 @@
                     <tr>
 
                         <td class="name" valign="top">
-                            <span style="color: #cc9933;">{{ post_user.username }}</span> - <span
-                                style="color: #bfa56d">личный КПК [{{ post_user.id }}] </span>
+                            <span style="color: #cc9933;" id="user-username">{{ post_user.username }}</span> - <span
+                                style="color: #bfa56d">личный КПК [{{ post_user.id }}]
+                            {% if post_user.id == user.id %}
+                                <a onclick="atmWnd(
+                                        'change_uname_wnd',
+                                        'Изменить никнейм',
+                                        changeUsernameForm({{ post_user.id }}),
+                                        '1')">
+                                (ред.) </a>
+                            {% endif %}
+                        </span>
                         </td>
 
                         <td class="ava" valign="top">
@@ -239,10 +248,19 @@
 
 
                         </td>
-                        <td class="pda8" valign="top" width="60%"><span style="color:orange"><b>Награды:</b></span> (<b><a
-                                href="$AWARDS_READ_URL$"
-                                title="Список наград">$AWARDS$</a></b>)</a> <?if($AWARDS_DO_URL$)?>[<a
-                                href="$AWARDS_DO_URL$">+</a>]<?endif?></td>
+                        <td class="pda8" valign="top" width="60%">
+                            <span style="color:orange"><b>Награды:</b></span>
+                            (<b><a onclick="atmWnd('awards_wnd',
+                                'Список наград',
+                                loadAwards({{ post_user.id }}), '1')" target="_self">
+                            <span id="user-awards" style="line-height: 1.6;">{{ post_user.get_awards_count }}</span></a></b>)
+                            <a onclick="atmWnd(
+                                    'add_award_wnd',
+                                    'Добавить награду',
+                                    addAwardForm({{ post_user.id }}),
+                                    '1')">
+                                [+]</a>
+                        </td>
                         <td class="s1" valign="top">
                             <div class="wpn_1" align="center"></div>
                         </td>
@@ -319,11 +337,14 @@
                                      style="height: 35px;padding: 0 15px 0 0;float: left" alt=""/>
                             {% endif %}
                             <span id="user_status">{{ post_user.status }}</span>
-                            <a onclick="atmWnd(
-            'img_color_select_wnd',
-            'Меню изменения статуса',
-            changeStatusForm(),
-            '1')">(ред.)</a>
+                            {% if post_user.id == user.id %}
+                                <a onclick="atmWnd(
+                            'img_color_select_wnd',
+                            'Меню изменения статуса',
+                            changeStatusForm(),
+                            '1')">
+                                    (ред.)</a>
+                            {% endif %}
 
                         </td>
 

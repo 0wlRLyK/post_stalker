@@ -23,24 +23,29 @@
             </div>
         {% endfor %}
     </div>
-    <div id="paginate_transactions"></div>
+    <div class="pagination">
+        <ul>
+            {% if page_obj.has_previous %}
+                <a href="{% url "users:user_money" user.id %}?page=1">
+                    <li>&laquo;</li>
+                </a>
+                <a href="{% url "users:user_money" user.id %}?page={{ page_obj.previous_page_number }}">
+                    <li>{{ page_obj.previous_page_number }}</li>
+                </a>
+            {% endif %}
+            {% if page_obj.number != 1 %}
+                <a class="is-active" href="#">
+                    <li>{{ page_obj.number }}</li>
+                </a>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <a href="{% url "users:user_money" user.id %}?page={{ page_obj.next_page_number }}">
+                    <li>{{ page_obj.next_page_number }}</li>
+                </a>
+                <a href="{% url "users:user_money" user.id %}?page={{ page_obj.paginator.num_pages }}">
+                    <li>&raquo;</li>
+                </a>
+            {% endif %}
+        </ul>
+    </div>
 </section>
-
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-        </span>
-
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">next &raquo;</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-
-        {% endif %}
-    </span>
-</div>

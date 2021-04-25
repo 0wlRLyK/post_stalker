@@ -1,0 +1,11 @@
+<section id="change_username">
+    <h5 style="color: red; text-align: center" id="change_username_fall"></h5>
+    <span>Цена <strong>{{ price }}</strong>
+        Ваш баланс: <strong><span>{{ user.money }}</span></strong></span><br>
+
+    <form method="post" id="change_username_form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+</section>

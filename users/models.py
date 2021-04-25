@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.postgres import fields
 from django.core.cache import cache
 from django.db import models
+from django.utils.html import format_html
 from django.utils.translation import gettext as _
 from userena.models import UserenaBaseProfile
 
@@ -217,6 +218,9 @@ class User(AbstractUser):
         born = self.birthday
         return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 
+    def get_awards_count(self):
+        return self.awarded_user.count()
+
 
 class UserProfile(UserenaBaseProfile):
     user = models.OneToOneField(User,
@@ -248,6 +252,7 @@ class Reputation(models.Model):
         return {"ico": "bulb.svg",
                 "sign": "",
                 "text": "Уровень репутации не изменен"}
+
 
     def __str__(self):
         return self.subject
@@ -299,3 +304,38 @@ class MoneyTransaction(models.Model):
                 return cls.objects.get()
             except cls.DoesNotExist:
                 return cls()
+
+
+class Award(models.Model):
+    icon = models.ImageField(upload_to="users/awards/", verbose_name="Иконка награды")
+    name = models.CharField(max_length=75, verbose_name="Название награды")
+    description = models.TextField(verbose_name="Описание награды", blank=True)
+
+    def icon_admin(self):
+        return format_html('<center><img href="{0}" src="{0}" /></center>'.format(self.icon.url))
+
+    icon_admin.allow_tags = True
+    icon_admin.short_description = 'Иконка'
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Награда"
+        verbose_name_plural = "Награды"
+
+
+class UserAward(models.Model):
+    id = models.AutoField(primary_key=True)
+    award = models.ForeignKey(Award, null=True, on_delete=models.SET_NULL, verbose_name="Награда")
+    author = models.ForeignKey(User, related_name="award_author", null=True, on_delete=models.SET_NULL)
+    awarded = models.ForeignKey(User, related_name="awarded_user", null=True, on_delete=models.SET_NULL)
+    create_datetime = models.DateTimeField(auto_now_add=True)
+    message = models.TextField(verbose_name="Сообщение", blank=True)
+
+    def __str__(self):
+        return self.message
+
+    class Meta:
+        verbose_name = "Награда пользователя"
+        verbose_name_plural = "Награды пользователя"

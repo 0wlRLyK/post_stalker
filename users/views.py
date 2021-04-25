@@ -1,9 +1,12 @@
-from django.http import JsonResponse, HttpResponseNotFound, HttpResponse
+import re
+
+from django.http import JsonResponse
 from django.views import generic
 from django.views.generic.list import MultipleObjectMixin
 
 from users import models as u_model
-from users.forms import AddRepForm, ChoiceImageColorForm, SetStatus
+from users.forms import AddRepForm, ChoiceImageColorForm, SetStatus, ChangeUsernameForm
+from utils import views as util
 
 U_SETTIGNS = u_model.UserSettings.load()
 
@@ -27,16 +30,10 @@ class ReputationCreateView(generic.CreateView):
     success_url = "/"
 
     def get(self, request, *args, **kwargs):
-        try:
-            user = u_model.User.objects.get(id=int(self.kwargs["user_id"]))
-        except u_model.User.DoesNotExist:
-            return HttpResponseNotFound("Пользователя не существует")
-        if user.id == request.user.id:
-            return HttpResponse("""
-            <section id="respect_changing">
-            Вы не можете изменить репутацию самому себе
-            </section>
-            """)
+        get = util.view_get(request, int(self.kwargs["user_id"]), "users.add_reputation", "respect_changing")
+        if get is True:
+            return super().get(self, request, *args, **kwargs)
+        return get
 
     def post(self, request, *args, **kwargs):
         author = request.user
@@ -56,7 +53,6 @@ class ReputationCreateView(generic.CreateView):
         elif operation_type == "plus":
             value = +1
         user.respect += value
-        print(operation_type, value, subj)
         data = {
             "id": u_model.Reputation.objects.last().id + 1,
             "from_user": author,
@@ -67,7 +63,6 @@ class ReputationCreateView(generic.CreateView):
                                      value=value)
         respect.save()
         user.save()
-        print(respect, user.respect)
         return JsonResponse({"result": bool(respect),
                              "current_respect": user.respect})
 
@@ -92,16 +87,10 @@ class TransactionCreateView(generic.CreateView):
     fields = ["value", "message"]
 
     def get(self, request, *args, **kwargs):
-        try:
-            user = u_model.User.objects.get(id=int(self.kwargs["user_id"]))
-        except u_model.User.DoesNotExist:
-            return HttpResponseNotFound("Пользователя не существует")
-        if user.id == request.user.id:
-            return HttpResponse("""
-            <section id="money_transfer">
-            Вы не можете перевести деньги самому себе
-            </section>
-            """)
+        get = util.view_get(request, int(self.kwargs["user_id"]), "users.add_moneytransaction", "money_transfer")
+        if get is True:
+            return super().get(self, request, *args, **kwargs)
+        return get
 
     def post(self, request, *args, **kwargs):
         author = request.user
@@ -161,7 +150,6 @@ class SelectChatImageView(generic.FormView):
         if request.POST.get('icon'):
             icon = int(request.POST.get('icon'))
         color = request.POST.get('color')
-        print(bool(icon), bool(color))
         if not icon and not color:
             return JsonResponse({
                 "result": False,
@@ -179,7 +167,6 @@ class SelectChatImageView(generic.FormView):
             user.money -= U_SETTIGNS.chat_ico_price
             amount -= U_SETTIGNS.chat_ico_price
         if color and user.money < U_SETTIGNS.chat_color_price:
-            print(U_SETTIGNS.chat_color_price, user.money)
             return JsonResponse({
                 "result": False,
                 "cause": f"Недостаточно {U_SETTIGNS.chat_color_price - user.money} ДФ для изменения цвета"
@@ -217,4 +204,83 @@ class ChangeStatusView(generic.FormView):
         return JsonResponse({
             "result": True,
             "status": status,
+        })
+
+
+class AwardDetailView(generic.DetailView, MultipleObjectMixin):
+    model = u_model.User
+    template_name = "users/awards.html"
+    context_object_name = "user"
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        object_list = self.object.awarded_user.all()
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        return context
+
+
+class AwardAddView(generic.CreateView):
+    model = u_model.UserAward
+    user_id = None
+    fields = ["award", "message"]
+    success_url = "/"
+
+    def get_context_data(self, **kwargs):
+        awards = u_model.Award.objects.all()
+        context = super().get_context_data(awards=awards)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        get = util.view_get(request, int(self.kwargs["user_id"]), "users.add_useraward", "add_award")
+        if get is True:
+            return super().get(self, request, *args, **kwargs)
+        return get
+
+    def post(self, request, *args, **kwargs):
+        author = request.user
+        value = int(request.POST.get('value'))
+        message = request.POST.get('msg')
+        user = util.get_user_by_id_or_response(int(self.kwargs["user_id"]))
+        award = u_model.UserAward(author=author, awarded=user, award_id=value, message=message)
+        award.save()
+        return JsonResponse({
+            "result": "True",
+            "awards_num": user.get_awards_count()
+        })
+
+
+class ChangeUsername(generic.FormView):
+    form_class = ChangeUsernameForm
+    template_name = "users/username_form.html"
+
+    def get_context_data(self, **kwargs):
+        price = U_SETTIGNS.nik_price
+        context = super().get_context_data(price=price, **kwargs)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        new_username = request.POST.get("new_username")
+        if not bool(re.match(r'^[\w.@+-]+\Z', new_username)):
+            return JsonResponse({
+                "result": False,
+                "cause": "Имя пользователя не валидно, т.к. содержит запрещенные символы",
+            })
+        if u_model.User.objects.filter(username=new_username):
+            return JsonResponse({
+                "result": False,
+                "cause": "Имя пользователя уже занято. Придумайте другое",
+            })
+        request.user.username = new_username
+        request.user.money -= U_SETTIGNS.nik_price
+        request.user.save()
+        transaction = u_model.MoneyTransaction(
+            from_user_id=None,
+            to_user_id=request.user.id,
+            message="Измение никнейма",
+            value=U_SETTIGNS.nik_price * -1
+        )
+        transaction.save()
+        return JsonResponse({
+            "result": True,
+            "new_username": new_username,
         })
