@@ -1,0 +1,179 @@
+{% load i18n static %}
+<td class="s1" valign="top">
+    {% if inv.slot1 %}
+        <a onclick="atmWnd(
+                'slot1_wnd',
+                '{{ inv.slot1.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                'Состояние&nbsp;:&nbsp;<span class=\'{{ inv.get_sl1c_class }}\'><b>{{ inv.slot1_condition }}%</b></span><br>' +
+                '<br><strong>{{ inv.slot1.name }}</strong><br><br>{{ inv.slot1.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.slot1.icon.url }}" alt="{{ inv.slot1.name }}">
+        </a>
+    {% endif %}
+</td>
+
+<td class="s2" valign="top">
+    {% if inv.slot2 %}
+        <a onclick="atmWnd(
+                'slot2_wnd',
+                '{{ inv.slot2.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                'Состояние&nbsp;:&nbsp;<span class=\'{{ inv.get_sl2c_class }}\'><b>{{ inv.slot2_condition }}%</b></span><br>' +
+                '<br><strong>{{ inv.slot2.name }}</strong><br><br>{{ inv.slot2.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.slot2.icon.url }}" alt="{{ inv.slot2.name }}">
+        </a>
+    {% endif %}
+</td>
+
+<td class="s3" valign="top">
+    {% if inv.slot3 %}
+        <a onclick="atmWnd(
+                'slot3_wnd',
+                '{{ inv.slot3.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                'Состояние&nbsp;:&nbsp;<span class=\'{{ inv.get_sl3c_class }}\'><b>{{ inv.slot3_condition }}%</b></span><br>' +
+                '<br><strong>{{ inv.slot3.name }}</strong><br><br>{{ inv.slot3.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.slot3.icon.url }}" alt="{{ inv.slot3.name }}">
+        </a>
+    {% else %}
+        <img src="{% static "/post_stalker/users/profile/inv/sviter.png" %}" alt="Свитер">
+    {% endif %}
+</td>
+
+
+<td class="grnd" valign="top">
+    {% if inv.grenade %}
+        <div class="ammo_bg_new">x{{ inv.grenade_quantity }}</div>
+        <a onclick="atmWnd(
+                'grenade_wnd',
+                '{{ inv.grenade.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                '<br><strong>{{ inv.grenade.name }}</strong><br>'+
+                '<br>{{ inv.grenade.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.grenade.icon.url }}" alt="">
+        </a>
+    {% endif %}
+</td>
+
+<td class="patrons1">
+    {% if inv.ammo_slot1 %}
+        <div class="ammo_bg_new">x{{ inv.ammo_slot1_quantity }}</div>
+        <a onclick="atmWnd(
+                'ammo1_wnd',
+                '{{ inv.ammo_slot1.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                '<br><strong>{{ inv.ammo_slot1.name }}</strong><br>'+
+                '<br>{{ inv.ammo_slot1.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.ammo_slot1.icon.url }}" alt="">
+        </a>
+    {% endif %}
+</td>
+
+<td class="patrons2">
+    {% if inv.ammo_slot2 %}
+        <div class="ammo_bg_new">x{{ inv.ammo_slot2_quantity }}</div>
+        <a onclick="atmWnd(
+                'ammo2_wnd',
+                '{{ inv.ammo_slot2.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                '<br><strong>{{ inv.ammo_slot2.name }}</strong><br>'+
+                '<br>{{ inv.ammo_slot2.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.ammo_slot2.icon.url }}" alt="">
+        </a>
+    {% endif %}
+</td>
+
+<td class="addon1" valign="top">
+    {% if inv.addon_slot1 %}
+        <a onclick="atmWnd(
+                'addon1_wnd',
+                '{{ inv.addon_slot2.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                '<br><strong>{{ inv.addon_slot1.name }}</strong><br>'+
+                '<br>{{ inv.addon_slot1.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.addon_slot1.icon.url }}" alt="">
+        </a>
+    {% endif %}
+</td>
+
+<td class="addon3" valign="top">
+    {% if inv.addon_slot2 %}
+        <a onclick="atmWnd(
+                'addon2_wnd',
+                '{{ inv.addon_slot2.name }}',
+                '<fieldset><legend>Описание</legend>'+
+                '<br><strong>{{ inv.addon_slot2.name }}</strong><br>'+
+                '<br>{{ inv.addon_slot2.description }}<br></fieldset>',
+                '1')">
+            <img src="{{ inv.addon_slot2.icon.url }}" alt="">
+        </a>
+    {% endif %}
+</td>
+
+
+<td class="dp1" valign="top">
+    {% if inv.upgrades_slot1 %}
+        {% for upgr in  inv.upgrades_slot1.all %}
+            <a onclick="atmWnd(
+                    'wpn_upgr{{ upgr.id }}_wnd',
+                    '{{ upgr.name }}',
+                    '<fieldset><legend>Описание</legend>'+
+                    '<br><strong>{{ upgr.name }}</strong><br>'+
+                    '<br>{% if upgr.description %}{{ upgr.description }}{% endif %}<br></fieldset>',
+                    '1')">
+                <img src="{{ upgr.icon.url }}" alt="">
+            </a>
+        {% endfor %}
+    {% endif %}
+</td>
+
+<td class="dp2" valign="top">
+    {% if inv.upgrades_slot2 %}
+        {% for upgr in  inv.upgrades_slot2.all %}
+            <a onclick="atmWnd(
+                    'pistol_upgr{{ upgr.id }}_wnd',
+                    '{{ upgr.name }}',
+                    '<fieldset><legend>Описание</legend>'+
+                    '<br><strong>{{ upgr.name }}</strong><br>'+
+                    '<br>{% if upgr.description %}{{ upgr.description }}{% endif %}<br></fieldset>',
+                    '1')">
+                <img src="{{ upgr.icon.url }}" alt="">
+            </a>
+        {% endfor %}
+    {% endif %}
+</td>
+
+<td class="dp3" valign="top">
+    {% if inv.upgrades_slot3 %}
+        {% for upgr in  inv.upgrades_slot3.all %}
+            <a onclick="atmWnd(
+                    'outfit_upgr{{ upgr.id }}_wnd',
+                    '{{ upgr.name }}',
+                    '<fieldset><legend>Описание</legend>'+
+                    '<br><strong>{{ upgr.name }}</strong><br>'+
+                    '<br>{% if upgr.description %}{{ upgr.description }}{% endif %}<br></fieldset>',
+                    '1')">
+                <img src="{{ upgr.icon.url }}" alt="">
+            </a>
+        {% endfor %}
+    {% endif %}
+
+</td>
+
+
+<td class="nog" valign="top">
+    <img src="{% static "/post_stalker/users/profile/design/knife.png" %}" height="47"
+         title="Нож. Стандартный армейский штык-нож. Незаменимое оружие при борьбе с контролёрами.">
+</td>
+
+
+<td class="razvlechenie" valign="top">
+
+</td>

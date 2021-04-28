@@ -185,6 +185,7 @@
                             <div onclick="atmWnd('test2', 'Новое окно', '{{ post_user.banreason }}', '1')">Открыть
                                 окно
                             </div>
+
                             {#<?if($_FORUM_ENTRIES$>=50)?><img title="за 50 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/18.png"> <?endif?>#}
                             {#<?if($_FORUM_ENTRIES$>=100)?><img title="за 100 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/11.png"><?endif?>#}
                             {#<?if($_FORUM_ENTRIES$>=300)?><img title="за 300 постов" src="http://gsc-stalker.ru/static/post_stalker/users/profile/design/nagrads/4.png"><?endif?>#}
@@ -261,68 +262,6 @@
                                     '1')">
                                 [+]</a>
                         </td>
-                        <td class="s1" valign="top">
-                            <div class="wpn_1" align="center"></div>
-                        </td>
-
-                        <td class="s2" valign="top">
-                            <div class="wpn_2" align="center"></div>
-                        </td>
-
-                        <td class="s3" valign="top">
-                            <div class="equip" align="center"></div>
-                        </td>
-
-
-                        <td class="pat1" valign="top">
-
-                            <div class="grenade" align="center"></div>
-                        </td>
-
-                        <td class="pat2" valign="top">
-
-                            <div class="detector" align="center"></div>
-                        </td>
-                        <td class="pat3" valign="top">
-
-                            <div class="medkit" align="center"></div>
-                        </td>
-
-                        <td class="dp1" valign="top">
-
-                        </td>
-
-                        <td class="dp2" valign="top">
-
-                        </td>
-
-                        <td class="dp3" valign="top">
-
-
-                        </td>
-
-                        <td class="patrons1" valign="top">
-
-                        </td>
-
-                        <td class="patronsz" valign="top">
-
-                        </td>
-
-                        <td class="nog" valign="top">
-                            <img src="{% static "/post_stalker/users/profile/design/knife.png" %}" height="47"
-                                 title="Нож. Стандартный армейский штык-нож. Незаменимое оружие при борьбе с контролёрами.">
-                        </td>
-
-                        <td class="patrons2" valign="top">
-
-
-                        </td>
-
-                        <td class="patronsx" valign="top">
-
-
-                        </td>
 
                         <td class="statys" valign="top">
                             {% if post_user.id == user.id %}
@@ -347,28 +286,7 @@
                             {% endif %}
 
                         </td>
-
-                        <script type="text/javascript">
-
-
-                        </script>
-
-
-                        <td class="patronsx" valign="top">
-
-                            <skript>
-                                <b></b>
-                                <script type="text/javascript">
-                                    p =
-                                        v = p
-                                    document.writeln("<B> " + v + " </B>");
-                                </script>
-                            </skript>
-                        </td>
-
-                        <td class="razvlechenie" valign="top">
-
-                        </td>
+                        {% include "users/profile/inventory.html" with inv=post_user.get_equipment %}
 
                     </tr>
                 </table>
