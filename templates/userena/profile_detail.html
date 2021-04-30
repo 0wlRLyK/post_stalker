@@ -1,4 +1,4 @@
-{% load i18n static %}
+{% load i18n static post_st %}
 {% with profile.user as post_user %}
     <!DOCTYPE html>
     <head>
@@ -307,45 +307,14 @@
                        align="center" border="0" cellpadding="0" cellspacing="0" height="1190" width="1024px">
                     <tr>
 
-                        <td style="padding-left:15px;padding-top:30px;padding-right:0px;" valign="top">
+                        <td valign="top">
                             <table align="center" border="0" cellpadding="0" cellspacing="0" height="1190"
                                    width="1024px"
                                    style="color: rgb(120, 134, 107); font-family: verdana, arial, helvetica; font-size: 10px; border: 0px solid rgb(38, 38, 38); background-image: url(http://post-stalker.com/static/post_stalker/users/profile/design/menu/stranica.png);">
                                 <tbody>
                                 <tr>
-                                    <td valign="top" style="padding-left: 15px; padding-top: 30px; padding-right: 0px;">
-                                        <div id="content-r"><img src="http://post-stalker.com/design/grupp/6.gif"
-                                                                 title="Миру Чистое Небо!" align="left">Группировка:
-                                            Чистое небо (Лидер группировки: Маркс)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/9.png"><br><br><img
-                                                    src="http://post-stalker.com/design/grupp/8.gif"
-                                                    title="Криминальные сталкеры." align="left">Группировка: Бандиты
-                                            (Лидер группировки: Мышка)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/8.png"><br><br><img
-                                                    src="http://post-stalker.com/design/grupp/3.gif"
-                                                    title="Вольные сталкеры - вольная жизнь." align="left">Группировка:
-                                            Вольные Сталкеры (Лидер группировки: Пустельга)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/6.png"><br><br><img
-                                                    src="http://post-stalker.com/design/grupp/1.gif"
-                                                    title="Потеря рейтинга за баны соклановцев" align="left">Группировка:
-                                            Свобода (Лидер группировки: Автор)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/4.png"><br><br><img
-                                                    src="http://post-stalker.com/design/grupp/4.gif"
-                                                    title="Военные против Зоны." align="left">Группировка: Военные
-                                            Сталкеры (Лидер группировки: стрингер)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/4.png"><br><br><img
-                                                    src="http://post-stalker.com/design/grupp/2.gif"
-                                                    title="Защитим мир от заразы Зоны!" align="left">Группировка: Долг
-                                            (Лидер группировки: Сухой)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/2.png"><br><br><img
-                                                    src="http://post-stalker.com/design/grupp/7.gif"
-                                                    title="Сталкеры - Наёмники." align="left">Группировка: Наёмники
-                                            (Лидер группировки: METALLIX)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/2.png"><br><br><img
-                                                    src="http://post-stalker.com/design/grupp/5.gif"
-                                                    title="Сталкеры поклоняющиеся Монолиту." align="left">Группировка:
-                                            Монолит (Лидер группировки: Вандан)<br><img
-                                                    src="http://post-stalker.com/dlia_Foruma/Reit/1.png"><br></div>
+                                    <td valign="top" style="padding-left:15px;padding-top:30px;padding-right:0px;">
+                                        {% fractions_list %}
                                     </td>
                                 </tr>
                                 </tbody>

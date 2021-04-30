@@ -135,10 +135,10 @@
 </td>
 
 <td class="dp2" valign="top">
-    {% if inv.upgrades_slot2 %}
-        {% for upgr in  inv.upgrades_slot2.all %}
+    {% if inv.upgrades_slot3 %}
+        {% for upgr in  inv.upgrades_slot3.all %}
             <a onclick="atmWnd(
-                    'pistol_upgr{{ upgr.id }}_wnd',
+                    'outfit_upgr{{ upgr.id }}_wnd',
                     '{{ upgr.name }}',
                     '<fieldset><legend>Описание</legend>'+
                     '<br><strong>{{ upgr.name }}</strong><br>'+
@@ -148,13 +148,14 @@
             </a>
         {% endfor %}
     {% endif %}
+
 </td>
 
 <td class="dp3" valign="top">
-    {% if inv.upgrades_slot3 %}
-        {% for upgr in  inv.upgrades_slot3.all %}
+    {% if inv.upgrades_slot2 %}
+        {% for upgr in  inv.upgrades_slot2.all %}
             <a onclick="atmWnd(
-                    'outfit_upgr{{ upgr.id }}_wnd',
+                    'pistol_upgr{{ upgr.id }}_wnd',
                     '{{ upgr.name }}',
                     '<fieldset><legend>Описание</legend>'+
                     '<br><strong>{{ upgr.name }}</strong><br>'+

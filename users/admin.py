@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.admin import UserAdmin, GroupAdmin
+from django.contrib.auth.models import Group
 from django.db.utils import ProgrammingError
 from django.utils.translation import gettext_lazy as _
 
@@ -103,3 +104,19 @@ class UpgradeOutfitAdmin(admin.ModelAdmin):
 @admin.register(users_models.Inventory)
 class InventoryAdmin(admin.ModelAdmin):
     list_display = ["id"]
+
+
+class GroupInline(admin.StackedInline):
+    model = users_models.Fraction
+    can_delete = False
+    verbose_name_plural = "Группировки"
+    verbose_name = "Группировка"
+
+
+class GroupAdmin(GroupAdmin):
+    inlines = (GroupInline,)
+
+
+# Re-register GroupAdmin
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)

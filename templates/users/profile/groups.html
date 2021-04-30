@@ -1,0 +1,18 @@
+{% load static %}
+<div id="content-r">
+
+    {% for fraction in fractions %}
+        <img src="{{ fraction.big_icon.url }}" title="{{ fraction.description }}" align="left">
+        Группировка: {{ fraction.group.name }}
+        {% if fraction.leader %}
+            (Лидер группировки:
+            <a href="{% url "userena_profile_detail" fraction.leader.id %}">{{ fraction.leader.username }}</a>)
+        {% endif %}
+        {% if fraction.deputy_leader %}
+            (Зам. лидера группировки:
+            <a href="{% url "userena_profile_detail" fraction.deputy_leader.id %}">{{ fraction.deputy_leader.username }}</a>
+        {% endif %}
+        <br>
+        <img src="/static/post_stalker/users/groups/Reit/{{ fraction.power }}.png"><br><br>
+    {% endfor %}
+</div>
