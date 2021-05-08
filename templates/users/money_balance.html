@@ -18,7 +18,7 @@
                     <span class="transact_value {{ money.get_range.class }}">{{ money.get_range.sign }}{{ money.value }} ДФ</span>
                     <span class="u-rep-date">{{ money.add_datetime }}</span>
                 </div>
-                <div class="u-rep-subj">{{ money.message }}</div>
+                <div class="u-rep-subj">{{ money.message | safe }}</div>
                 <hr>
             </div>
         {% endfor %}

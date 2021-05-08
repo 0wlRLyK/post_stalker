@@ -1,6 +1,6 @@
 from django import template
 
-from users.models import Fraction
+from users.models_dir.group import Fraction
 
 register = template.Library()
 

@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from users.models import User, Reputation, UserSettings
+from users.models import User
+from users.models_dir.funcs import Reputation
+from users.models_dir.settings import UserSettings
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -49,3 +51,7 @@ class SetStatus(forms.Form):
 
 class ChangeUsernameForm(forms.Form):
     new_username = forms.CharField(max_length=150, required=True)
+
+
+class EmptyForm(forms.Form):
+    pass

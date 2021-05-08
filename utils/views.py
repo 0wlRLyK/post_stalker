@@ -1,4 +1,4 @@
-from django.http import HttpResponseNotFound, HttpResponse
+from django.http import HttpResponseNotFound, HttpResponse, JsonResponse
 
 from users.models import User
 
@@ -32,3 +32,41 @@ def get_user_by_id_or_response(uid):
         return HttpResponseNotFound("Пользователя не существует")
     else:
         return user
+
+
+def get_object_or_response(item_id, item_object):
+    """
+    Function gets object if it exist else return Json response with error
+    :param item_id: ID of passed object
+    :param item_object: object
+    :return: passed object if doesn't exist JSON response
+    """
+    try:
+        obj = item_object.objects.get(id=item_id)
+    except item_object.DoesNotExist:
+        return JsonResponse({
+            "result": False,
+            "cause": "Object is doesn't exist!"
+        })
+    else:
+        return obj, obj.cost
+
+
+def get_item_cost_or_0(obj):
+    if obj:
+        return obj.get_sell_cost()
+    return 0
+
+
+def check_money(money, amount):
+    if amount > money:
+        return JsonResponse({
+            "result": False,
+            "cause": "Недостаточно денег для покупки"
+        })
+
+
+def sell_item(value, model, money):
+    item, amount = get_object_or_response(value, model)
+    check_money(money, amount)
+    return item, amount

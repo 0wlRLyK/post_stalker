@@ -4,14 +4,15 @@ from django.contrib.auth.models import Group
 from django.db.utils import ProgrammingError
 from django.utils.translation import gettext_lazy as _
 
-from users import models as users_models
+from users.models import User
+from users.models_dir import settings, funcs, equipment, group
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    model = users_models.User
+    model = User
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'avatar', 'ip', 'birthday', 'country',
@@ -26,16 +27,16 @@ class CustomUserAdmin(UserAdmin):
     list_display = ['username', 'id', 'email', "valid_username", ]
 
 
-admin.site.unregister(users_models.User)
-admin.site.register(users_models.User, CustomUserAdmin)
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
 
 
-@admin.register(users_models.Award)
+@admin.register(funcs.Award)
 class AwardAdmin(admin.ModelAdmin):
     list_display = ["name", "description", "id", "icon_admin"]
 
 
-@admin.register(users_models.UserSettings)
+@admin.register(settings.UserSettings)
 class SiteSettingsAdmin(admin.ModelAdmin):
     # Створимо об'єкт за замовчуванням при першому сторінки SiteSettingsAdmin зі списком налаштувань
     def __init__(self, model, admin_site):
@@ -43,7 +44,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         # обов'язково оберніть завантаження і збереження SiteSettings в try catch,
         # Щоб можна було виконати створення міграцій бази даних
         try:
-            users_models.UserSettings.load().save()
+            settings.UserSettings.load().save()
         except ProgrammingError:
             pass
 
@@ -56,67 +57,68 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         return False
 
 
-@admin.register(users_models.Weapon)
+@admin.register(equipment.Weapon)
 class WeaponAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.Pistol)
+@admin.register(equipment.Pistol)
 class PistolAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.Outfit)
+@admin.register(equipment.Outfit)
 class OutfitAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.Ammo)
+@admin.register(equipment.Ammo)
 class AmmoAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.PistolAmmo)
+@admin.register(equipment.PistolAmmo)
 class PistolAmmoAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.Grenade)
+@admin.register(equipment.Grenade)
 class GrenadeAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.Addon)
+@admin.register(equipment.Addon)
 class AddonAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.UpgradeWeapon)
+@admin.register(equipment.UpgradeWeapon)
 class UpgradeWeaponAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.UpgradeOutfit)
+@admin.register(equipment.UpgradeOutfit)
 class UpgradeOutfitAdmin(admin.ModelAdmin):
     list_display = ["name", "icon_admin", "cost"]
 
 
-@admin.register(users_models.Inventory)
+@admin.register(equipment.Inventory)
 class InventoryAdmin(admin.ModelAdmin):
     list_display = ["id"]
 
 
 class GroupInline(admin.StackedInline):
-    model = users_models.Fraction
+    model = group.Fraction
     can_delete = False
     verbose_name_plural = "Группировки"
     verbose_name = "Группировка"
 
 
-class GroupAdmin(GroupAdmin):
+class NewGroupAdmin(GroupAdmin):
     inlines = (GroupInline,)
+    list_display = ["id", "name"]
 
 
 # Re-register GroupAdmin
 admin.site.unregister(Group)
-admin.site.register(Group, GroupAdmin)
+admin.site.register(Group, NewGroupAdmin)

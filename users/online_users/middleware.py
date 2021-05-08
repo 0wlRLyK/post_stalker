@@ -7,9 +7,9 @@ class OnlineNowMiddleware(object):
 
     def __call__(self, request):
         user = request.user
-        if not user.is_authenticated:
-            return
-
-        OnlineUserActivity.update_user_activity(user)
         response = self.get_response(request)
-        return response
+        if user.is_authenticated:
+            OnlineUserActivity.update_user_activity(user)
+            return response
+        else:
+            return response

@@ -67,7 +67,7 @@ INSTALLED_APPS = [
     'machina.apps.forum_permission',
 
     # Post-stalker apps
-    'users'
+    'users',
 ]
 
 AUTHENTICATION_BACKENDS = (
