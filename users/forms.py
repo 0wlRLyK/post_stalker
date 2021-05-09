@@ -23,11 +23,11 @@ class AddRepForm(forms.ModelForm):
                ('plus', 'повысить репутацию'),
                ('minus', 'понизить репутацию')]
 
-    operation_type = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    operation_type = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect, label="Действие")
 
     class Meta:
         model = Reputation
-        fields = ['subject', 'operation_type']
+        fields = ['operation_type', 'subject']
 
 
 class ChoiceImageColorForm(forms.Form):
@@ -50,7 +50,7 @@ class SetStatus(forms.Form):
 
 
 class ChangeUsernameForm(forms.Form):
-    new_username = forms.CharField(max_length=150, required=True)
+    new_username = forms.CharField(max_length=150, required=True, label="Новое имя пользователя")
 
 
 class EmptyForm(forms.Form):

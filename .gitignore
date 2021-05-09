@@ -1,2 +1,14 @@
 /.idea/
-/static/
+
+/static/admin/
+/static/ckeditor/
+/static/machina/
+/static/mptt/
+/static/post_stalker/ajax/
+/static/post_stalker/ico/
+/static/post_stalker/users/groups/
+/static/post_stalker/users/profile/design/
+/static/post_stalker/users/profile/inv/
+/static/post_stalker/users/ranks/
+/static/post_stalker/users/v_zone.gif
+/static/post_stalker/users/vne_zony.gif

@@ -67,12 +67,7 @@
                             <span style="color: #cc9933;" id="user-username">{{ post_user.username }}</span> - <span
                                 style="color: #bfa56d">личный КПК [{{ post_user.id }}]
                             {% if post_user.id == user.id %}
-                                <a onclick="atmWnd(
-                                        'change_uname_wnd',
-                                        'Изменить никнейм',
-                                        changeUsernameForm({{ post_user.id }}),
-                                        '1')">
-                                (ред.) </a>
+                                <a onclick="changeUsernameForm()">(ред.) </a>
 
                             {% endif %}
                         </span>
@@ -148,14 +143,10 @@
                         <td class="dan" valign="top">
                             Репутация:
                             <a title="Смотреть историю репутации"
-                               onclick="atmWnd('rep_wnd',
-                                       'История репутации',
-                                       loadReputation({{ post_user.id }}), '1')">
+                               onclick="loadReputation({{ post_user.id }})">
                                 <b><span id="user-respect">{{ post_user.respect }}</span></b>
                             </a>
-                            <a onclick="atmWnd('add_rep_wnd',
-                                    'Изменить уровень репутации',
-                                    loadRespectForm({{ post_user.id }}), '1')">[+/-]</a>
+                            <a onclick="loadRespectForm({{ post_user.id }})">[+/-]</a>
 
                             Замечания: &trade;
                             <a onclick="atmWnd('banreason_wnd',
@@ -238,13 +229,9 @@
                                 style="line-height: 1.6;">$_COM_ENTRIES$</span></a></b>)
                         </td>
                         <td class="pda7" valign="top" width="40%"><span style="color:orange"><b>ДФ:</b></span>
-                            (<b><a onclick="atmWnd('transactions_wnd',
-                                    'Баланс денежных средств',
-                                    loadMoneyTransactions({{ post_user.id }}), '1')" target="_self">
+                            (<b><a onclick="loadMoneyTransactions({{ post_user.id }})" target="_self">
                                 <span id="user-currency" style="line-height: 1.6;">{{ post_user.money }}</span></a></b>)
-                            <b>[<a onclick="atmWnd('transfer_wnd',
-                                    'Перевести средства',
-                                    loadTransactionForm({{ post_user.id }}), '1')">±</a>]</b>
+                            <b>[<a onclick="loadTransactionForm({{ post_user.id }})">±</a>]</b>
 
 
                         </td>
@@ -253,21 +240,15 @@
                         </td>
                         <td class="pda8" valign="top" width="60%">
                             <span style="color:orange"><b>Награды:</b></span>
-                            (<b><a onclick="atmWnd('awards_wnd',
-                                'Список наград',
-                                loadAwards({{ post_user.id }}), '1')" target="_self">
+                            (<b><a onclick="loadAwards({{ post_user.id }})" target="_self">
                             <span id="user-awards" style="line-height: 1.6;">{{ post_user.get_awards_count }}</span></a></b>)
-                            <a onclick="atmWnd(
-                                    'add_award_wnd',
-                                    'Добавить награду',
-                                    addAwardForm({{ post_user.id }}),
-                                    '1')">
+                            <a onclick="addAwardForm({{ post_user.id }})">
                                 [+]</a>
                         </td>
 
                         <td class="statys" valign="top">
                             {% if post_user.id == user.id %}
-                                <a onclick="atmWnd( 'img_color_select_wnd', 'Меню выбора иконки/цвета никнейма для чата', selectImgColorForm(), '1')">
+                                <a onclick="selectImgColorForm()">
                                     <img id="chat_icon" src="/static/post_stalker/ico/Chat/{{ post_user.ico_num }}.png"
                                          title="Статус"
                                          style="height: 35px;padding: 0 15px 0 0;float: left" alt=""/>
@@ -279,12 +260,7 @@
                             {% endif %}
                             <span id="user_status">{{ post_user.status }}</span>
                             {% if post_user.id == user.id %}
-                                <a onclick="atmWnd(
-                            'img_color_select_wnd',
-                            'Меню изменения статуса',
-                            changeStatusForm(),
-                            '1')">
-                                    (ред.)</a>
+                                <a onclick="changeStatusForm()">(ред.)</a>
                             {% endif %}
 
                         </td>
@@ -293,11 +269,9 @@
                                 <div class="shop_btn"></div>
                             </a>
                         </td>
+                    </tr>
                     <tr id="user_inventory">
                         {% include "users/profile/inventory.html" with inv=post_user.get_equipment %}
-                    </tr>
-
-
                     </tr>
                 </table>
 

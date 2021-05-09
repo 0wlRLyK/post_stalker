@@ -4,24 +4,19 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+
         .tabs_shop {
             display: flex;
             flex-direction: column;
         }
 
         .tabs__links {
-            /* display: flex; */
             width: 100%;
-            /* overflow-x: auto; */
-            /* overflow-y: hidden; */
             margin-left: auto;
             margin-right: auto;
             margin-bottom: 10px;
             order: 0;
             white-space: normal;
-            background-color: #fff;
-            border: 1px solid #e3f2fd;
-            box-shadow: 0 2px 4px 0 #e3f2fd;
         }
 
         .tabs__links > a {
@@ -29,11 +24,16 @@
             text-decoration: none;
             padding: 6px 10px;
             text-align: center;
-            color: #1976d2;
+            color: #c8e6ba;
+            border: 1px solid #8cb05e;
+            background: #284f2d;
+            border-radius: 5px;
+            margin: 2px 0px;
+            transition: 0.25s ease-in-out;
         }
 
         .tabs__links > a:hover {
-            background-color: rgba(227, 242, 253, 0.3);
+            background-color: #336030;
         }
 
         .tabs_shop > #wpn-tab:target ~ .tabs__links > a[href="#wpn-tab"],
@@ -48,8 +48,9 @@
         .tabs_shop > #upgr_p-tab:target ~ .tabs__links > a[href="#upgr_p-tab"],
         .tabs_shop > #upgr_o-tab:target ~ .tabs__links > a[href="#upgr_o-tab"]
         .tabs_shop > #total-tab:target ~ .tabs__links > a[href="#total-tab"] {
-            background-color: #bbdefb;
+            background-color: #1d3c21;
             cursor: default;
+            border: 1px solid #429d4d;
         }
 
         .tabs_shop > div:not(.tabs__links) {
@@ -60,12 +61,55 @@
         .tabs_shop > div:target {
             display: block;
         }
+
+
+        .shop_item, .shop_item_checkbox {
+            width: auto;
+            display: inline-flex;
+            border: 2px solid #418429;
+            border-radius: 10px;
+            background-image: url("/static/post_stalker/img/bg/0.png");
+            position: relative;
+            padding: 0px 15px 20px;
+            min-height: 45px;
+            flex-wrap: wrap;
+            align-content: end;
+            margin: 2px 0;
+        }
+
+        .shop_item_checkbox {
+            padding: 20px 25px;
+        }
+
+        .shop_item:hover {
+            background-image: url("/static/post_stalker/img/bg/0_h.png");
+        }
+
+        .shop_item_checked {
+            background-image: url("/static/post_stalker/img/bg/0_h.png");
+        }
+
+        .shop_item_cost {
+            background: #152f0c;
+            -khtml-border-radius: 3px;
+            font-size: 8pt;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border: 1px solid #2e5e1d;
+            border-radius: 3px;
+            position: absolute;
+            /* float: right; */
+            bottom: 0;
+            right: 0;
+            padding: 3px 5px;
+            color: #b0c69c;
+        }
     </style>
 </head>
 <body>
 <section style="width: 100%;">
-    <h4>Ваш баланс: <span id="shop_u_money" data-money="{{ user.money }}">{{ user.money }}</span></h4>
-    <h5>Сумма покупки <span id="shop_sum">0</span></h5>
+    <h4>Ваш баланс: <span id="shop_u_money" data-money="{{ user.money }}">{{ user.money }}</span> ДФ</h4>
+    <h5>Сумма покупки <span id="shop_sum">0</span> ДФ</h5>
     <form method="post" id="equip_shop_form">
         {% csrf_token %}
         <div class="tabs_shop">
@@ -73,7 +117,7 @@
                 {% if user.equip.slot1 %}
                     <p>
                         <label for="wpn_sell">
-                            <input type="checkbox" name="wpn_sell"
+                            <input type="checkbox" name="wpn_sell" class="shop_item_radio"
                                    data-cost="-{{ user.equip.slot1.get_sell_cost }}"
                                    data-name="{{ user.equip.slot1.name }} (Продажа)" value="true">
                             Продать оружие 1-го слота ({{ user.equip.slot1 }})
@@ -84,11 +128,13 @@
                 {% endif %}
                 <fieldset id="wpn_list">
                     {% for item in wpn %}
-                        <span><label>
-            <input type="radio" name="wpn" id="wpn{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" class="shop_item_radio" name="wpn" id="wpn{{ item.id }}"
+                                   value="{{ item.id }}" data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}"><img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
@@ -97,7 +143,7 @@
                 {% if user.equip.slot2 %}
                     <p>
                         <label for="gun_sell">
-                            <input type="checkbox" name="gun_sell"
+                            <input type="checkbox" name="gun_sell" class="shop_item_radio"
                                    data-cost="-{{ user.equip.slot2.get_sell_cost }}"
                                    data-name="{{ user.equip.slot2.name }}  (Продажа)" value="true">
                             Продать оружие 2-го слота ({{ user.equip.slot2 }})
@@ -107,11 +153,14 @@
                 {% endif %}
                 <fieldset id="gun_list">
                     {% for item in pistol %}
-                        <span><label>
-            <input type="radio" name="gun" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" name="gun" id="{{ item.id }}" value="{{ item.id }}"
+                                   data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
@@ -119,7 +168,7 @@
                 {% if user.equip.slot3 %}
                     <p>
                         <label for="outfit_sell">
-                            <input type="checkbox" name="outfit_sell"
+                            <input type="checkbox" name="outfit_sell" class="shop_item_radio"
                                    data-cost="-{{ user.equip.slot3.get_sell_cost }}"
                                    data-name="{{ user.equip.slot3.name }}  (Продажа)" value="true">
                             Продать оружие 1-го слота ({{ user.equip.slot3 }})
@@ -131,43 +180,50 @@
                 <fieldset id="outfit_list">
 
                     {% for item in outfit %}
-                        <span><label>
-            <input type="radio" name="outfit" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" name="outfit" id="{{ item.id }}" value="{{ item.id }}"
+                                   data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
             <div id="ammo_w-tab">
                 <p>
-                    <label for="ammo_w_quantity">Колличество пачек: </label></span>
-                    <input type="number" value="1" min="1" id="ammo_w_quantity">
-                    <a onclick="$('#equip_shop_form input[name=\'ammo_w\']').prop('checked', false)">Отменить</a>
-                </p>
+                    <label for="ammo_w_quantity">Колличество пачек: </label></p>
+                <input type="number" value="1" min="1" id="ammo_w_quantity">
+                <a onclick="$('#equip_shop_form input[name=\'ammo_w\']').prop('checked', false)">Отменить</a>
                 <fieldset id="ammo_w_list">
                     {% for item in ammo1 %}
-                        <span><label>
-            <input type="radio" name="ammo_w" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" name="ammo_w" id="{{ item.id }}" value="{{ item.id }}"
+                                   data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
             <div id="ammo_p-tab">
                 <p>
-                    <label for="ammo_p_quantity">Колличество пачек: </label></span>
-                    <input type="number" value="1" min="1" id="ammo_p_quantity">
-                    <a onclick="$('#equip_shop_form input[name=\'ammo_p\']').prop('checked', false)">Отменить</a>
-                </p>
+                    <label for="ammo_p_quantity">Колличество пачек: </label></p>
+                <input type="number" value="1" min="1" id="ammo_p_quantity">
+                <a onclick="$('#equip_shop_form input[name=\'ammo_p\']').prop('checked', false)">Отменить</a>
                 <fieldset id="ammo_p_list">
                     {% for item in ammo2 %}
-                        <span><label>
-            <input type="radio" name="ammo_p" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" name="ammo_p" class="shop_item_radio" id="{{ item.id }}"
+                                   value="{{ item.id }}" data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
@@ -186,11 +242,14 @@
                 {% endif %}
                 <fieldset id="addons_w_list">
                     {% for item in addon %}
-                        <span><label>
-            <input type="radio" name="addon_w" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" name="addon_w" class="shop_item_radio" id="{{ item.id }}"
+                                   value="{{ item.id }}" data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
@@ -210,60 +269,74 @@
                 {% endif %}
                 <fieldset id="addons_p_list">
                     {% for item in addon %}
-                        <span><label>
-            <input type="radio" name="addon_p" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" name="addon_p" id="{{ item.id }}" value="{{ item.id }}"
+                                   data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
             <div id="grenades-tab">
                 <p>
-                    <label for="grenade_quantity">Колличество штук: </label></span>
-                    <input type="number" value="1" min="1" id="grenade_quantity">
-                    <a onclick="$('#equip_shop_form input[name=\'grenade\']').prop('checked', false)">Отменить</a>
-                </p>
+                    <label for="grenade_quantity">Колличество штук: </label></p>
+                <input type="number" value="1" min="1" id="grenade_quantity">
+                <a onclick="$('#equip_shop_form input[name=\'grenade\']').prop('checked', false)">Отменить</a>
                 <fieldset id="grenades_list">
                     {% for item in grnd %}
-                        <span><label>
-            <input type="radio" name="grenade" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item" title="{{ item.name }}"><label>
+                            <input type="radio" name="grenade" class="shop_item_radio" id="{{ item.id }}"
+                                   value="{{ item.id }}" data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
             <div id="upgr_w-tab">
                 <fieldset id="upgr_w_list">
                     {% for item in upgr_w %}
-                        <span><label>
-            <input type="checkbox" name="upgr_w" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item_checkbox" title="{{ item.name }}"><label>
+                            <input type="checkbox" name="upgr_w" id="{{ item.id }}" value="{{ item.id }}"
+                                   data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
             <div id="upgr_p-tab">
                 <fieldset id="upgr_p_list">
                     {% for item in upgr_p %}
-                        <span><label>
-            <input type="checkbox" name="upgr_p" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item_checkbox" title="{{ item.name }}"><label>
+                            <input type="checkbox" name="upgr_p" id="{{ item.id }}" value="{{ item.id }}"
+                                   data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>
             <div id="upgr_o-tab">
                 <fieldset id="upgr_o_list">
                     {% for item in upgr_o %}
-                        <span><label>
-            <input type="checkbox" name="upgr_o" id="{{ item.id }}" value="{{ item.id }}" data-cost="{{ item.cost }}"
-                   data-name="{{ item.name }}">
-                <img src="{{ item.icon.url }}" alt="">
-            </label></span>
+                        <div class="shop_item_checkbox" title="{{ item.name }}"><label>
+                            <input type="checkbox" name="upgr_o" id="{{ item.id }}" value="{{ item.id }}"
+                                   data-cost="{{ item.cost }}"
+                                   data-name="{{ item.name }}">
+                            <img src="{{ item.icon.url }}" alt="">
+                        </label>
+                            <div class="shop_item_cost">{{ item.cost }} ДФ</div>
+                        </div>
                     {% endfor %}
                 </fieldset>
             </div>

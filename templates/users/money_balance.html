@@ -33,11 +33,9 @@
                     <li>{{ page_obj.previous_page_number }}</li>
                 </a>
             {% endif %}
-            {% if page_obj.number != 1 %}
                 <a class="is-active" href="#">
                     <li>{{ page_obj.number }}</li>
                 </a>
-            {% endif %}
             {% if page_obj.has_next %}
                 <a href="{% url "users:user_money" user.id %}?page={{ page_obj.next_page_number }}">
                     <li>{{ page_obj.next_page_number }}</li>

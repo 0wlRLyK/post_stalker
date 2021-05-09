@@ -260,6 +260,7 @@ class ChangeUsername(generic.FormView):
         return context
 
     def post(self, request, *args, **kwargs):
+        old_username = request.user.username
         new_username = request.POST.get("new_username")
         if not bool(re.match(r'^[\w.@+-]+\Z', new_username)):
             return JsonResponse({
@@ -271,17 +272,18 @@ class ChangeUsername(generic.FormView):
                 "result": False,
                 "cause": "Имя пользователя уже занято. Придумайте другое",
             })
-        request.Username = new_username
+        request.user.username = new_username
         request.user.money -= U_SETTIGNS.nik_price
         request.user.save()
         transaction = funcs.MoneyTransaction(
             from_user_id=None,
             to_user_id=request.user.id,
-            message="Измение никнейма",
+            message=f"Измение никнейма с {old_username} на {new_username}",
             value=U_SETTIGNS.nik_price * -1
         )
         transaction.save()
         return JsonResponse({
             "result": True,
             "new_username": new_username,
+            "money": request.user.money,
         })

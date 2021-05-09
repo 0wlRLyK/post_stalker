@@ -180,4 +180,7 @@ class EquipmentShop(generic.FormView):
         transaction.save()
         inv.save()
         print("--- %s seconds ---" % (time.time() - start_time))
-        return JsonResponse({"result": True})
+        return JsonResponse({
+            "result": True,
+            "money": user.money
+        })

@@ -7,37 +7,43 @@
         }
     </style>
     <h3>В данном меню можно сменить иконку и цвет никнейма в чате</h3>
-    <h5 style="text-align: center;color: red;" id="img_color_cause"></h5><br>
+    <p>Ваш баланс: <strong><span id="wnd_my_currency_transfer" data-money="{{ user.money }}">{{ user.money }} ДФ</span></strong>
+    </p>
+    <p style="text-align: center;color: red;" id="img_color_cause"></p><br>
     <form method="post" id="img_color_select_form">
         {% csrf_token %}
-        <label class="label_full_w">
-            Иконки:
-            <span style="float: right"><i>Цена</i>
-                <strong>{{ settings.ico_price }}</strong>
+        <fieldset>
+            <legend>Иконки:</legend>
+            <label class="label_full_w">
+            <span style="float: right">
+                <i>Цена</i>
+                <strong>{{ settings.ico_price }} ДФ</strong>
             </span>
-        </label>
-        <hr>
-        {% for choice in form.ico %}
-            <span class="radio">{{ choice.tag }}</span>
-            <img src="{{ choice.choice_label }}" alt="">
-        {% endfor %}<br>
-        <label class="label_full_w">
-            Цвета никнейма:
+            </label><br>
+            {% for choice in form.ico %}
+                <span class="radio">{{ choice.tag }}</span>
+                <img src="{{ choice.choice_label }}" alt="">
+            {% endfor %}
+        </fieldset>
+        <fieldset>
+            <legend>Цвета никнейма:</legend>
+            <label class="label_full_w">
             <span style="float: right"><i>Цена</i>
-                <strong>{{ settings.color_price }}</strong>
+                <strong>{{ settings.color_price }}  ДФ</strong>
             </span>
-        </label>
-        {% for choice in form.color %}
-
-            <span class="radio">{{ choice.tag }}</span>
-            <span style="color: {{ choice.choice_label }}">{{ user.username }}</span>
-        {% endfor %}
-        <br>
-        <input type="button"
-               onclick="$('input[name=\'ico\']').prop('checked', false);
+            </label><br>
+            {% for choice in form.color %}
+                <span class="radio">{{ choice.tag }}</span>
+                <span style="color: {{ choice.choice_label }}">{{ user.username }}</span>
+            {% endfor %}
+        </fieldset>
+        <fieldset>
+            <input type="button"
+                   onclick="$('input[name=\'ico\']').prop('checked', false);
                 $('input[name=\'color\']').prop('checked', false);"
-               value="Сбросить все"/> |
-
-        <input type="submit" value="Submit">
+                   value="Сбросить все"/> |
+            <input type="submit" value="Отправить">
+            <div style="display: inline-block;" class="post_result"></div>
+        </fieldset>
     </form>
 </section>

@@ -1,0 +1,512 @@
+body {
+    background: #000000 url('/static/post_stalker/users/profile/design/fon.jpg') no-repeat fixed center;
+    font-family: Verdana, Tahoma, Arial, serif;
+    color: #78866b;
+    font-size: 8.5pt;
+}
+
+hr {
+    color: #2f4532;
+    height: 1px;
+    border-top: 0px;
+    border-style: dashed;
+}
+
+input, textarea, select {
+    background: #000000;
+    border: 1px #464646 solid;
+    font-size: 8pt;
+    color: #989898;
+    font-family: verdana;
+}
+
+a:hover img {
+    opacity: 1;
+}
+
+a:link {
+    text-decoration: none;
+    color: #4f7942;
+}
+
+a:active {
+    text-decoration: none;
+    color: #4f7942;
+}
+
+a:visited {
+    text-decoration: none;
+    color: #4f7942;
+}
+
+a:hover {
+    text-decoration: none;
+    color: #2f4532;
+}
+
+.nagrads {
+    position: absolute;
+    display: block;
+    width: 260px;
+    height: 700px;
+    margin-left: 40px;
+    margin-top: 32px;
+}
+
+.name {
+    position: absolute;
+    display: block;
+    width: 310px;
+    height: 30px;
+    margin-left: 740px;
+    margin-top: 29px;
+}
+
+.pda1 {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin-left: 379px;
+    margin-top: 731px;
+}
+
+.pda2 {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin-left: 379px;
+    margin-top: 778px;
+}
+
+.pda3 {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin-left: 379px;
+    margin-top: 825px;
+}
+
+.pda4 {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin-left: 379px;
+    margin-top: 872px;
+}
+
+.pda5 {
+    position: absolute;
+    display: block;
+    width: 150px;
+    height: 50px;
+    margin-left: 553px;
+    margin-top: 731px;
+}
+
+.pda6 {
+    position: absolute;
+    display: block;
+    width: 150px;
+    height: 50px;
+    margin-left: 553px;
+    margin-top: 778px;
+}
+
+.pda7 {
+    position: absolute;
+    display: block;
+    width: 150px;
+    height: 50px;
+    margin-left: 553px;
+    margin-top: 825px;
+}
+
+.pda8 {
+    position: absolute;
+    display: block;
+    width: 150px;
+    height: 50px;
+    margin-left: 553px;
+    margin-top: 872px;
+}
+
+.ava {
+    position: absolute;
+    display: block;
+    width: 300px;
+    height: 165px;
+    margin-left: 730px;
+    margin-top: 90px;
+}
+
+.dan {
+    position: absolute;
+    display: block;
+    width: 270px;
+    height: 165px;
+    margin-left: 735px;
+    margin-top: 400px;
+}
+
+.statys {
+    position: absolute;
+    display: block;
+    width: 300px;
+    height: 35px;
+    margin-left: 347px;
+    margin-top: 640px;
+}
+
+.redak {
+    position: absolute;
+    display: block;
+    width: 200px;
+    height: 35px;
+    margin-left: 895px;
+    margin-top: 72px;
+}
+
+.svyz {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 60px;
+    margin-top: 777px;
+}
+
+.svyz1 {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 150px;
+    margin-top: 778px;
+}
+
+.gr {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 60px;
+    margin-left: 900px;
+    margin-top: 126px;
+}
+
+.rn {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 60px;
+    margin-left: 900px;
+    margin-top: 202px;
+}
+
+.st {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 60px;
+    margin-left: 900px;
+    margin-top: 277px;
+}
+
+.s1 {
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 300px;
+    margin-left: 358px;
+    margin-top: 136px;
+}
+
+.s2 {
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 170px;
+    margin-left: 620px;
+    margin-top: 236px;
+}
+
+.s3 {
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 170px;
+    margin-left: 480px;
+    margin-top: 215px;
+}
+
+.s3 img {
+    max-height: 280px;
+}
+
+.addon1 {
+    position: absolute;
+    display: grid;
+    width: 115px;
+    height: 60px;
+    margin-left: 340px;
+    margin-top: 500px;
+    align-content: center;
+    justify-content: center;
+}
+
+.addon2 {
+    position: absolute;
+    display: grid;
+    width: 115px;
+    height: 60px;
+    margin-left: 470px;
+    margin-top: 500px;
+    align-content: center;
+    justify-content: center;
+}
+
+.addon3 {
+    position: absolute;
+    display: grid;
+    width: 115px;
+    height: 60px;
+    margin-left: 595px;
+    margin-top: 500px;
+    align-content: center;
+    justify-content: center;
+}
+
+.grnd {
+    position: absolute;
+    display: grid;
+    width: 120px;
+    height: 70px;
+    margin-left: 465px;
+    margin-top: 120px;
+    align-content: center;
+    justify-content: center;
+}
+
+.dp1 {
+    position: absolute;
+    display: block;
+    width: 115px;
+    height: 60px;
+    margin-left: 340px;
+    margin-top: 570px;
+}
+
+.dp2 {
+    position: absolute;
+    display: block;
+    width: 115px;
+    height: 60px;
+    margin-left: 470px;
+    margin-top: 570px;
+}
+
+.dp3 {
+    position: absolute;
+    display: block;
+    width: 115px;
+    height: 60px;
+    margin-left: 600px;
+    margin-top: 570px;
+}
+
+.patrons1 {
+    position: absolute;
+    display: grid;
+    width: 120px;
+    height: 70px;
+    margin-left: 335px;
+    margin-top: 30px;
+    align-content: center;
+    justify-content: center;
+}
+
+.patrons2 {
+    position: absolute;
+    display: grid;
+    width: 120px;
+    height: 70px;
+    margin-left: 595px;
+    margin-top: 30px;
+    align-content: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+
+.pat4 {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 50px;
+    margin-left: 600px;
+    margin-top: 523px;
+}
+
+.isq {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 70px;
+    margin-top: 826px;
+}
+
+.isq1 {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 150px;
+    margin-top: 826px;
+}
+
+.zvanie {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 54px;
+    margin-top: 876px;
+}
+
+.zvaniegr {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 150px;
+    margin-top: 876px;
+}
+
+.arena {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 150px;
+    margin-top: 920px;
+}
+
+.arenas {
+    position: absolute;
+    display: block;
+    width: 400px;
+    height: 35px;
+    margin-left: 150px;
+    margin-top: 916px;
+}
+
+.podpis {
+    position: absolute;
+    display: block;
+    margin-top: 30px;
+}
+
+
+.razvlechenie {
+    position: absolute;
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin-left: 780px;
+    margin-top: 790px;
+}
+
+.patronsx {
+    position: absolute;
+    display: block;
+    width: 150px;
+    height: 21px;
+    margin-left: 470px;
+    margin-top: 120px;
+}
+
+.nog {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 15px;
+    margin-left: 475px;
+    margin-top: 40px;
+}
+
+#inv7_1 {
+    position: absolute;
+    width: 130px;
+    height: 15px;
+    left: 10px;
+    top: 25px;
+}
+
+#inv7_2 {
+    position: absolute;
+    width: 130px;
+    height: 15px;
+    left: 150px;
+    top: 25px;
+}
+
+#inv7_3 {
+    position: absolute;
+    width: 130px;
+    height: 15px;
+    left: 290px;
+    top: 25px;
+}
+
+.money {
+    cursor: pointer;
+}
+
+.patronsz {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 15px;
+    margin-left: 693px;
+    margin-top: 84px;
+}
+
+#user_inventory {
+    position: absolute;
+    top: 45px;
+}
+
+.ammo_bg_new {
+    background: rgba(36, 35, 18, 0.7);
+    font-size: 8pt;
+    border: 1px solid #000;
+    border-radius: 3px;
+    position: absolute;
+    float: right;
+    padding: 2px 4px;
+    right: 0;
+    font-weight: bold;
+}
+
+.shop_btn_td {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 15px;
+    margin-left: 12px;
+    margin-top: 706px;
+}
+
+.shop_btn {
+    background-image: url('/static/post_stalker/users/profile/design/shop.jpg');
+    height: 40px;
+    width: 313px;
+}
+
+.shop_btn:hover {
+    background-image: url('/static/post_stalker/users/profile/design/shop_hover.jpg');
+}
