@@ -15,6 +15,7 @@ django-ckeditor = "*"
 django-userena-ce = "*"
 django-guardian = "*"
 easy-thumbnails = "*"
+bleach = "*"
 
 [dev-packages]
 

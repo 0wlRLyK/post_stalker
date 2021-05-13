@@ -7,7 +7,7 @@ from django.views import generic
 
 from users.forms import EmptyForm
 from users.models_dir import equipment, settings, funcs
-from utils import views as util
+from utils.views import functions as util
 
 U_SETTINGS = settings.UserSettings.load()
 

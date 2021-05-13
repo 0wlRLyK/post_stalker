@@ -4,7 +4,7 @@
 {% block title %}{% trans "Signin" %}{% endblock %}
 
 {% block content %}
-    <form action="" method="post">
+    <form action="" method="post" id="sign_in_form">
         {% csrf_token %}
         <fieldset>
             <legend>{% trans "Signin" %}</legend>

@@ -18,7 +18,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from machina import urls as machina_urls
-from userena.views import profile_detail
 
 from users.views.userena import profile_detail as pda_detail
 
@@ -26,8 +25,9 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('forum/', include(machina_urls)),
                   path('users/', include('userena.urls')),
-                  path('u/funcs/', include('users.urls')),
-                  path("pda/<username>/", profile_detail, name="user_pda"),
+                  path('u/funcs/', include('users.urls.functional')),
+                  path('pda/', include('users.urls.pda')),
+
                   path("pda_id/<int:uid>/", pda_detail, name="user_pda_id"),
               ] + static(settings.STATIC_URL, docuent_root=settings.STATICFILES_DIRS)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

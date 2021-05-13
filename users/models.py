@@ -8,6 +8,7 @@ from django.core.cache import cache
 from django.db import models
 from django.utils.translation import gettext as _
 from userena.models import UserenaBaseProfile
+from userena.models import UserenaSignup
 
 from users.models_dir.equipment import Inventory
 from users.online_users.models import OnlineUserActivity

@@ -617,6 +617,258 @@ function equipShopPost(data) {
     });
 }
 
+/*
+Edit user data
+ */
+function editUserForm() {
+    const ajaxWndName = 'edit_user_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Изменение личной информации пользователя',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        700
+    );
+    $.ajax({
+        url: '/pda/edit/',
+        success: function (data) {
+            atmWnd.content(ajaxWndName, $(data));
+            $('#edit_user_form').on('submit', function (event) {
+                event.preventDefault();
+                $('#' + ajaxWndName + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+                for (let instance in CKEDITOR.instances)
+                    CKEDITOR.instances[instance].updateElement();
+                let data = $(this).serialize();
+                console.log(data)
+                editUser(data);
+            });
+        }
+    })
+}
+
+
+function editUser(send_data) {
+    $.ajax({
+        url: '/pda/edit/',
+        type: "POST", // http method
+        data: JSON.stringify(send_data),
+
+
+        success: function (data) {
+            $('#edit_user_form #sending_form').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>Успешно");
+            $.ajax({
+                url: location.href,
+                type: "GET",
+                success: function (page_data) {
+                    let personalData = $(page_data).find('#user_personal_data').html(),
+                        signature = $(page_data).find('#user_signature').html();
+                    $('#user_personal_data').html(personalData);
+                    $('#user_signature').html(signature);
+                }
+            });
+            $("#edit_user_wnd").fadeOut(1000);
+            atmWnd.hide("edit_user_wnd");
+
+        },
+
+        error: function (xhr, errmsg, err) {
+            $('#change_username_fall').text();
+            console.log(xhr.status + ": " + xhr.responseText);
+            $('#edit_user_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+            alert("failed " + data)
+        }
+    });
+}
+
+/*
+Edit user email
+ */
+function editEmailForm() {
+    const ajaxWndName = 'edit_user_email_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Изменение почты пользователя',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        700
+    );
+    $.ajax({
+        url: '/pda/edit_email/',
+        success: function (data) {
+            atmWnd.content(ajaxWndName, $(data).find("#edit_email_form"));
+            $('#edit_email_form').on('submit', function (event) {
+                event.preventDefault();
+                $('#' + ajaxWndName + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+                editEmail(data, ajaxWndName);
+            });
+        }
+    })
+}
+
+
+function editEmail(email_data, ajaxWndName) {
+    $.ajax({
+        url: '/pda/edit_email/',
+        type: "POST", // http method
+        data: {'email': $("#id_email").val()},
+
+
+        success: function (data) {
+            $('#edit_email_form .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
+            $.ajax({
+                url: data.redirect_url,
+                type: "GET",
+                success: function (page_data) {
+                    atmWnd.content(ajaxWndName, $(page_data));
+                }
+            });
+
+        },
+
+        error: function (xhr, errmsg, err) {
+            $('#change_username_fall').text();
+            console.log(xhr.status + ": " + xhr.responseText);
+            $('#edit_email_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+            alert("failed " + data)
+        }
+    });
+}
+
+/*
+Edit user password
+ */
+function editPasswordForm() {
+    const ajaxWndName = 'edit_password_email_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Изменение почты пользователя',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        700
+    );
+    $.ajax({
+        url: '/pda/change_password/',
+        success: function (data) {
+            atmWnd.content(ajaxWndName, $(data).find("#password_change_form"));
+            $('#password_change_form').on('submit', function (event) {
+                event.preventDefault();
+                $('#' + ajaxWndName + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+                editPassword(ajaxWndName);
+            });
+        }
+    })
+}
+
+
+function editPassword(ajaxWndName) {
+    $.ajax({
+        url: '/pda/change_password/',
+        type: "POST", // http method
+        data: {
+            'old_password': $("#id_old_password").val(),
+            'new_password1': $("#id_new_password1").val(),
+            'new_password2': $("#id_new_password2").val(),
+        },
+
+
+        success: function (data) {
+            console.log(data)
+            alert(data.result);
+            if (data.result) {
+                $('#password_change_form .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
+                $.ajax({
+                    url: data.redirect_url,
+                    type: "GET",
+                    success: function (page_data) {
+                        atmWnd.content(ajaxWndName, $(page_data));
+                        setTimeout(() => window.location.replace("/pda/login/"), 2500);
+                    }
+                });
+            } else {
+                $('#password_change_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+                $("#password_change_form #password_change_form_reload").html(data.load_html)
+            }
+
+
+        },
+
+        error: function (xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            $('#password_change_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+            alert("failed " + data)
+        }
+    });
+}
+
+/*
+Sign In
+ */
+function signInAJAX(ajaxWndName, reload = true) {
+    $.ajax({
+        url: '/pda/login/',
+        success: function (data) {
+            atmWnd.content(ajaxWndName, $(data).find("#sign_in_form"));
+            $('#sign_in_form').on('submit', function (event) {
+                event.preventDefault();
+                $('#' + ajaxWndName + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+                signIn(ajaxWndName, reload);
+            });
+        }
+    })
+}
+
+function signInForm(reload = true) {
+    const ajaxWndName = 'sign_in_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Изменение почты пользователя',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        700
+    );
+    signInAJAX(ajaxWndName, reload)
+
+}
+
+
+function signIn(ajaxWndName, reload) {
+    $.ajax({
+        url: '/pda/login/',
+        type: "POST", // http method
+        data: {
+            'identification': $("#id_identification").val(),
+            'password': $("#id_password").val(),
+            'remember_me': $("#id_remember_me").val(),
+        },
+
+
+        success: function (data) {
+            console.log(data)
+            alert(data.result);
+            if (data.result) {
+                $('#sign_in_form .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
+                if (reload) {
+                    location.reload();
+                } else {
+                    setTimeout(() => atmWnd.hide(ajaxWndName), 2500);
+                }
+            } else {
+                $('#sign_in_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+                $("#sign_in_form #password_change_form_reload").html(data.load_html)
+            }
+
+
+        },
+
+        error: function (xhr, errmsg, err) {
+            console.log(xhr.status + ": " + xhr.responseText);
+            $('#sign_in_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+            alert("failed " + data)
+        }
+    });
+}
+
+
 function intOr0(value = "") {
     return parseInt(value || 0);
 }
@@ -628,3 +880,8 @@ function strToBool(value) {
         return false
     }
 }
+
+/*
+TODO:
+1. Create a state windows after get response from server
+ */

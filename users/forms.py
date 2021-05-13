@@ -55,3 +55,8 @@ class ChangeUsernameForm(forms.Form):
 
 class EmptyForm(forms.Form):
     pass
+
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email", "birthday", "gender", "country", "state", "signature"]

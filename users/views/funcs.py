@@ -7,7 +7,7 @@ from django.views.generic.list import MultipleObjectMixin
 from users.forms import AddRepForm, ChoiceImageColorForm, SetStatus, ChangeUsernameForm
 from users.models import User
 from users.models_dir import settings, funcs
-from utils import views as util
+from utils.views import functions as util
 
 U_SETTIGNS = settings.UserSettings.load()
 

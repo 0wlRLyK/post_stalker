@@ -376,3 +376,12 @@ Pagination
 a img:hover {
     opacity: 1;
 }
+
+#user_signature {
+    max-height: 200px;
+    overflow: hidden;
+}
+
+#user_signature img {
+    max-height: 165px;
+}

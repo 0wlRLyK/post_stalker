@@ -93,7 +93,7 @@
 
                         <td class="redak" valign="top">
                             {% if post_user.id == user.id %}
-                                [ <a href="{% url 'userena_profile_edit' post_user.username %}">Изменить данные</a> ]
+                                [ <a onclick="editUserForm()">Изменить данные</a> ]
                             {% endif %}
 
                             <div style="padding-top:4px;" id="userPMread">[ <a href="$_PM_READ_URL$">Читать ЛС (<b></b>)</a>
@@ -112,15 +112,20 @@
                             <b>E-mail:</b>
                         </td>
                         <td class="svyz1" valign="top">
+
                             {{ post_user.email }}
+                            {% if post_user.id == user.id %}
+                                [ <a onclick="editEmailForm()">Изменить e-mail</a> ]
+                            {% endif %}
 
 
                         </td>
 
                         <td class="isq" valign="top">
-                            <b>ICQ:</b>
                         <td class="isq1" valign="top">
-
+                            {% if post_user.id == user.id %}
+                                [ <a onclick="editPasswordForm()">Смениить пароль</a> ]
+                            {% endif %}
                         </td>
 
                         <td class="zvanie" valign="top">
@@ -159,7 +164,7 @@
                                 <hr><b>Имя:</b> {% if post_user.first_name %}{{ post_user.first_name }}{% endif %}
                                 {% if post_user.last_name %}{{ post_user.last_name }}{% endif %}
                             {% endif %}
-
+                            <span id="user_personal_data">
                             <hr>
                             <b>Пол:</b> {{ post_user.get_gender }}
                             <hr>
@@ -170,6 +175,7 @@
                             <b>Дата регистрации:</b> {{ post_user.date_joined }}
                             <hr>
                             <b>Дата входа:</b> {{ post_user.last_login }}
+                            </span>
 
 
                         </td>
@@ -280,7 +286,7 @@
                     <tr>
                         <td>
                             {% if post_user.signature %}
-                                <div align="center">{{ post_user.signature|safe }}</div></td>
+                                <div align="center" id="user_signature">{{ post_user.signature|safe }}</div></td>
                             {% endif %}
                     </tr>
                 </table>

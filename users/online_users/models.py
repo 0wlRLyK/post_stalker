@@ -7,6 +7,7 @@ from django.utils import timezone
 
 
 class OnlineUserActivity(models.Model):
+    id = models.AutoField(primary_key=True)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     last_activity = models.DateTimeField()
 
