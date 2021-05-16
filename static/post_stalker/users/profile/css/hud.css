@@ -391,7 +391,7 @@ a:hover {
     display: block;
     width: 400px;
     height: 35px;
-    margin-left: 150px;
+    margin-left: 20px;
     margin-top: 920px;
 }
 
@@ -509,4 +509,95 @@ a:hover {
 
 .shop_btn:hover {
     background-image: url('/static/post_stalker/users/profile/design/shop_hover.jpg');
+}
+
+.fraction {
+    display: flex;
+}
+
+.fraction_img {
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    flex-flow: wrap;
+}
+
+.fraction_descr {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.join_group_btn {
+    background-image: url("/static/post_stalker/users/profile/design/vstup.jpg");
+    height: 45px;
+    width: 945px;
+    transition: 1s ease-in-out;
+    margin: auto;
+}
+
+.join_group_btn:hover {
+    background-image: url("/static/post_stalker/users/profile/design/vstup_hover.jpg");
+    transition: 1s ease-in-out;
+
+}
+
+.app_default, .app_accepted, .app_refused, .app_banished {
+    /* background: red; */
+    border: 2px solid;
+    border-radius: 10px;
+    margin: 5px 0;
+    padding: 5px 10px;
+}
+
+.app_accepted {
+    background-color: #17371fb3;
+    background-image: url("/static/post_stalker/img/accept.png");
+    background-position: right;
+    background-repeat: no-repeat;
+    border-color: #288a3f;
+}
+
+.app_refused {
+    background-color: #371717b3;
+    background-image: url("/static/post_stalker/img/refuse.png");
+    background-position: right;
+    background-repeat: no-repeat;
+    border-color: #8a2828;
+}
+
+.app_banished {
+    background-color: rgba(55, 23, 23, 0.5);
+    background-image: url("/static/post_stalker/img/banished.png");
+    background-position: right;
+    background-repeat: no-repeat;
+    border-color: #6b1f1f;
+}
+
+.app_default {
+    background-color: #2f2f2f4d;
+}
+
+details {
+    border: 2px solid #536035;
+    border-radius: 4px;
+    padding: .5em .5em 0;
+    color: #d7d7d7;
+}
+
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+    background: #1c1c1ccf;
+}
+
+details[open] {
+    padding: .5em;
+}
+
+details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: .5em;
 }

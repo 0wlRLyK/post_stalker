@@ -4,9 +4,9 @@ from django.contrib.auth.models import Group
 from django.db.utils import ProgrammingError
 from django.utils.translation import gettext_lazy as _
 
+from users.forms import CustomUserCreationForm, CustomUserChangeForm
 from users.models import User
 from users.models_dir import settings, funcs, equipment, group
-from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 
 class CustomUserAdmin(UserAdmin):
@@ -104,7 +104,7 @@ class UpgradeOutfitAdmin(admin.ModelAdmin):
 
 @admin.register(equipment.Inventory)
 class InventoryAdmin(admin.ModelAdmin):
-    list_display = ["id"]
+    list_display = ["id", "get_username"]
 
 
 class GroupInline(admin.StackedInline):
@@ -118,6 +118,11 @@ class NewGroupAdmin(GroupAdmin):
     inlines = (GroupInline,)
     list_display = ["id", "name"]
 
+
+@admin.register(group.ApplicationForMembership)
+class ApplicationForMembershipAdmin(admin.ModelAdmin):
+    list_display = ["user", "group", "decision", "archived"]
+    list_filter = ["decision", "archived"]
 
 # Re-register GroupAdmin
 admin.site.unregister(Group)

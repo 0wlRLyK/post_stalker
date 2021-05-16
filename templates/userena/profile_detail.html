@@ -105,6 +105,25 @@
                                     ЛС</a> ]
                                 </div>
                             {% endif %}
+                            {% if user.is_leader or user.is_superuser or user.is_staff %}
+                                <a onclick="atmWnd('expire_wnd', 'Cписок заявок на вступление в группировку',
+                                        `
+                            <div id='expire_user'>
+                            <p style='color: red; text-align: center' id='error_cause'></p>
+                            <h3>Вы действительно хотите изгнать {{ post_user }}?</h3>
+                            <details>
+                            <summary>Причина изгнания</summary>
+                            <textarea id='expired_cause' cols='30' rows='10'></textarea>
+                             </details>
+                             <button onclick='expire({{ post_user.id }})'>Да, я действительно хочу изгнать пользователя {{ post_user }}</button>
+                             <div style='display: inline-block;' class='post_result'></div>
+                             </div>
+                            `,
+                                        '1',)">
+                                    <strong style="color: #721A1A">[ Изгнать <br>из группировки ]</strong>
+                                </a>
+
+                            {% endif %}
                         </td>
 
                         <td class="svyz" valign="top">
@@ -114,6 +133,7 @@
                         <td class="svyz1" valign="top">
 
                             {{ post_user.email }}
+                            {{ post_user.is_superuser }}
                             {% if post_user.id == user.id %}
                                 [ <a onclick="editEmailForm()">Изменить e-mail</a> ]
                             {% endif %}
@@ -123,6 +143,7 @@
 
                         <td class="isq" valign="top">
                         <td class="isq1" valign="top">
+
                             {% if post_user.id == user.id %}
                                 [ <a onclick="editPasswordForm()">Смениить пароль</a> ]
                             {% endif %}
@@ -138,9 +159,17 @@
                         </td>
 
                         <td class="arena" valign="top">
-                            <b></b>
+                            <b>Заявки на <br>вступление в <br>группировки:</b>
                         <td class="arenas" valign="top">
-
+                            <a onclick="loadUserFractionApps({{ post_user.id }})">
+                                ( {{ post_user.application_user.count }} )
+                            </a> |
+                            {% if user.is_leader or user.is_superuser or user.is_staff %}
+                                <a onclick="loadGroupFractionApps({{ user.get_fraction.id }})">
+                                    {{ post_user.get_fraction.id }} {{ post_user.get_fraction }}
+                                    ( Заявки на вступление )
+                                </a>
+                            {% endif %}
 
                         </td>
 
@@ -305,6 +334,7 @@
                                 <tr>
                                     <td valign="top" style="padding-left:15px;padding-top:30px;padding-right:0px;">
                                         {% fractions_list %}
+                                        <div class="join_group_btn" onclick="JoinFractionForm()"></div>
                                     </td>
                                 </tr>
                                 </tbody>

@@ -1,18 +1,30 @@
 {% load static %}
-<div id="content-r">
+<div id="content-r" style="padding: 0 15%;">
 
     {% for fraction in fractions %}
-        <img src="{{ fraction.big_icon.url }}" title="{{ fraction.description }}" align="left">
-        Группировка: {{ fraction.group.name }}
-        {% if fraction.leader %}
-            (Лидер группировки:
-            <a href="{% url "userena_profile_detail" fraction.leader.id %}">{{ fraction.leader.username }}</a>)
-        {% endif %}
-        {% if fraction.deputy_leader %}
-            (Зам. лидера группировки:
-            <a href="{% url "userena_profile_detail" fraction.deputy_leader.id %}">{{ fraction.deputy_leader.username }}</a>
-        {% endif %}
-        <br>
-        <img src="/static/post_stalker/users/groups/Reit/{{ fraction.power }}.png"><br><br>
+        <div class="fraction">
+            <div class="fraction_img">
+                <a onclick="loadFraction({{ fraction.group.id }})">
+                    <img src="{{ fraction.big_icon.url }}" title="{{ fraction.description }}" align="left">
+                </a>
+            </div>
+            <div class="fraction_descr">
+                <div>
+                    Группировка: {{ fraction.group.name }}
+                    {% if fraction.leader %}
+                        (Лидер группировки:
+                        <a href="{% url "userena_profile_detail" fraction.leader.id %}">{{ fraction.leader.username }}</a>
+                        )
+                    {% endif %}
+                    {% if fraction.deputy_leader %}
+                        (Зам. лидера группировки:
+                        <a href="{% url "userena_profile_detail" fraction.deputy_leader.id %}">{{ fraction.deputy_leader.username }}</a>
+                    {% endif %}
+                    <br>
+                </div>
+                <img src="/static/post_stalker/users/groups/Reit/{{ fraction.power }}.png"><br><br>
+            </div>
+        </div>
     {% endfor %}
+
 </div>

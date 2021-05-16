@@ -20,8 +20,8 @@ def upload_to_item(instance, filename):
 
 class User(AbstractUser):
     GENDER_CHOICE = [
-        (1, "Man"),
-        (0, "Woman"),
+        (1, "Сталкер"),
+        (0, "Сталкерша"),
     ]
     id = models.AutoField(primary_key=True)
     avatar = models.ImageField(upload_to="avatar", null=True, blank=True)
@@ -40,7 +40,7 @@ class User(AbstractUser):
     ico_num = models.PositiveSmallIntegerField(default=1, verbose_name="Номер иконки")
     chat_color = models.CharField(max_length=10, verbose_name="Цвет", null=True, blank=True)
 
-    equip = models.OneToOneField("Inventory", null=True, verbose_name="Снаряжение пользователя",
+    equip = models.OneToOneField("Inventory", null=True, verbose_name="Снаряжение пользователя", related_name="user",
                                  on_delete=models.SET_NULL)
     group_id = models.PositiveSmallIntegerField(null=True, default=1)
 
@@ -70,6 +70,9 @@ class User(AbstractUser):
         else:
             return "/media/post_st/ava/avatar.png"
 
+    def get_posts_count(self):
+        return self.rank + self.forum_profile.posts_count
+
     def get_group(self):
         if self.groups.count() > 0:
             return self.groups.first()
@@ -80,6 +83,10 @@ class User(AbstractUser):
     def get_fraction(self):
         if self.groups.count() > 0:
             return self.groups.first().gr_faction
+
+    def is_leader(self):
+        if self.get_fraction():
+            return self.get_fraction().leader_id == self.id
 
     def get_rank(self):
         if self.rank < 50:
@@ -144,6 +151,9 @@ class User(AbstractUser):
             "name": "",
             "url": "/static/post_stalker/users/vne_zony.gif"
         }
+
+    def get_bans(self):
+        return bool(self.banreason)
 
     def get_gender(self):
         genders = ("Сталкерша", "Сталкер")

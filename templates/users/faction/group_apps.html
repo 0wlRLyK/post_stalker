@@ -1,0 +1,133 @@
+<head>
+    <style>
+        details {
+            border: 2px solid #536035;
+            border-radius: 4px;
+            padding: .5em .5em 0;
+            color: #d7d7d7;
+        }
+
+        summary {
+            font-weight: bold;
+            margin: -.5em -.5em 0;
+            padding: .5em;
+            background: #1c1c1ccf;
+        }
+
+        details[open] {
+            padding: .5em;
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid #aaa;
+            margin-bottom: .5em;
+        }
+
+        button.btn {
+            font-size: 12px;
+            letter-spacing: 2px;
+            padding: 10px 15px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: inline-block;
+            margin: 10px 5px;
+            -webkit-transition: all 0.4s;
+            -moz-transition: all 0.4s;
+            transition: all 0.4s;
+        }
+
+        button.accept {
+            background: #3faa364f;
+            color: white;
+            border: 2px solid #3faa36;
+        }
+
+        button.accept:hover {
+            background-color: transparent;
+            color: #73ff67;
+            -webkit-transition: all 0.4s;
+            -moz-transition: all 0.4s;
+            transition: all 0.4s;
+        }
+
+        button.refuse {
+            background: #aa36364f;
+            color: white;
+            border: 2px solid #aa3636;
+        }
+
+        button.refuse:hover {
+            background-color: transparent;
+            color: #ff6767;
+            -webkit-transition: all 0.4s;
+            -moz-transition: all 0.4s;
+            transition: all 0.4s;
+        }
+    </style>
+</head>
+<hr>
+<div id="user_transactions_page">
+    <p style="color: red; text-align: center" id="accept_group_cause"></p>
+    {% for app in apps_list %}
+        <div id="app_form{{ app.id }}" class="app_{{ app.get_app_status }}">
+            <div class="u-rep-history-item">
+                <div class="flex-justify-between">
+                        <span class="u-rep-author"><b>
+                            <a href="{% url "pda:user_pda" app.user.username %}">{{ app.user }}</a>
+                            [ {{ app.user.get_fraction }} ]
+                        </b></span>
+                    <span class="u-rep-date">{{ app.add_datetime }}</span>
+                </div>
+                <div class="u-rep-subj">
+                    {% if app.user_message %}
+                        <p><i>Комментарий пользователя: </i>{{ app.user_message | safe }}</p>
+                    {% endif %}
+                    <p><i>Ответ лидера
+                        {% if app.leader %}
+                            <a href="{% url "pda:user_pda" app.leader.username %}"><strong>{{ app.leader }}</strong></a>
+                        {% endif %} :</i>{{ app.get_leader_msg | safe }}</p>
+                    <ul>
+                        <li>{{ app.user.respect }} / {{ fraction.er_respect }} репутации</li>
+                        <li>{{ app.user.get_posts|default:0 }} / {{ fraction.er_messages }} постов</li>
+                        <li>{% if user.get_bans %}Есть блокировки{% else %}Нет блокировок{% endif %}</li>
+                    </ul>
+                    {% if not app.archived %}
+                        <div id="leader_decision{{ app.id }}">
+                            <details>
+                                <summary>Ответ</summary>
+                                <textarea id="app_comment{{ app.id }}" cols="30" rows="10"></textarea>
+                            </details>
+                            <button class="btn accept" onclick="accept({{ app.id }})">Принять</button>
+                            |
+                            <button class="btn refuse" onclick="refuse({{ app.id }})">Отказать</button>
+                        </div>
+                        <div style="display: inline-block;" class="post_result"></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="pagination">
+    <ul>
+        {% if page_obj.has_previous %}
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page=1">
+                <li>&laquo;</li>
+            </a>
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page={{ page_obj.previous_page_number }}">
+                <li>{{ page_obj.previous_page_number }}</li>
+            </a>
+        {% endif %}
+        <a class="is-active" href="#">
+            <li>{{ page_obj.number }}</li>
+        </a>
+        {% if page_obj.has_next %}
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page={{ page_obj.next_page_number }}">
+                <li>{{ page_obj.next_page_number }}</li>
+            </a>
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page={{ page_obj.paginator.num_pages }}">
+                <li>&raquo;</li>
+            </a>
+        {% endif %}
+    </ul>
+</div>

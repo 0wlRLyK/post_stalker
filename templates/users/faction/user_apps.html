@@ -1,0 +1,46 @@
+<hr>
+<div id="user_transactions_page">
+    {% for app in apps_list %}
+        <div class="app_{{ app.get_app_status }}">
+            <div class="u-rep-history-item">
+                <div class="flex-justify-between">
+                    <span class="u-rep-author"><b>{{ app.user }} ->  [ {{ app.group }} ]</b></span>
+                    <span class="u-rep-date">{{ app.add_datetime }}</span>
+                </div>
+                <div class="u-rep-subj">
+                    {% if app.user_message %}
+                        <p><i>Комментарий пользователя: </i>{{ app.user_message | safe }}</p>
+                    {% endif %}
+                    <p><i>Ответ лидера
+                        {% if app.leader %}
+                            <a href="{% url "pda:user_pda" app.leader.username %}"><strong>{{ app.leader }}</strong></a>
+                        {% endif %} :</i>{{ app.get_leader_msg | safe }}</p>
+                </div>
+                <hr>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+<div class="pagination">
+    <ul>
+        {% if page_obj.has_previous %}
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page=1">
+                <li>&laquo;</li>
+            </a>
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page={{ page_obj.previous_page_number }}">
+                <li>{{ page_obj.previous_page_number }}</li>
+            </a>
+        {% endif %}
+        <a class="is-active" href="#">
+            <li>{{ page_obj.number }}</li>
+        </a>
+        {% if page_obj.has_next %}
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page={{ page_obj.next_page_number }}">
+                <li>{{ page_obj.next_page_number }}</li>
+            </a>
+            <a href="{% url "pda:user_apps_for_join" user.id %}?page={{ page_obj.paginator.num_pages }}">
+                <li>&raquo;</li>
+            </a>
+        {% endif %}
+    </ul>
+</div>

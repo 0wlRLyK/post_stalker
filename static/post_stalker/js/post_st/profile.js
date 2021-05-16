@@ -91,7 +91,7 @@ function changeRepsect(uid = 1) {
 
         error: function (xhr, errmsg, err) {
             $('#transfer_fall').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#add_rep_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
         }
     });
@@ -170,7 +170,7 @@ function transferMoney(uid = 1) {
 
         error: function (xhr, errmsg, err) {
             $('#transfer_fall').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#transfer_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
         }
     });
@@ -227,7 +227,7 @@ function changeImgColor() {
 
         error: function (xhr, errmsg, err) {
             $('#img_color_cause').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#img_color_select_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
         }
     });
@@ -282,7 +282,7 @@ function changeStatus() {
 
         error: function (xhr, errmsg, err) {
             $('#status_cause').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#set_status_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
         }
     });
@@ -317,7 +317,7 @@ function addAwardForm(uid = 1) {
             let award_view = $("#" + ajaxWndName + " #award_view"),
                 awards_list = $("#" + ajaxWndName + " #awards_list");
             $('#add_award_form select').on('change', function () {
-                let award_item = awards_list.children("#award" + this.value);
+                let award_item = awards_list.children("#award" + this.value).clone();
                 award_view.html(award_item);
                 award_view.children("div").children(".award_itm_img").css("display", "block");
             });
@@ -357,7 +357,7 @@ function addAward(uid = 1) {
 
         error: function (xhr, errmsg, err) {
             $('#award_add_fall').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#add_award_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
         }
     });
@@ -409,7 +409,7 @@ function changeUsername() {
 
         error: function (xhr, errmsg, err) {
             $('#change_username_fall').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#change_uname_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
         }
     });
@@ -609,9 +609,9 @@ function equipShopPost(data) {
         },
 
         error: function (xhr, errmsg, err) {
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#equip_shop_form #sending_form').html("<img src='/static/post_stalker/ajax/er.png' alt='Ошибка'>" +
-                "<b style='color: red'>" + xhr.status + ": " + xhr.responseText + "</b>");
+                "<b style='color: red'>" + xhr.status + ": " + errmsg + "</b>");
 
         }
     });
@@ -673,7 +673,7 @@ function editUser(send_data) {
 
         error: function (xhr, errmsg, err) {
             $('#change_username_fall').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#edit_user_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
             alert("failed " + data)
         }
@@ -727,7 +727,7 @@ function editEmail(email_data, ajaxWndName) {
 
         error: function (xhr, errmsg, err) {
             $('#change_username_fall').text();
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#edit_email_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
             alert("failed " + data)
         }
@@ -793,7 +793,7 @@ function editPassword(ajaxWndName) {
         },
 
         error: function (xhr, errmsg, err) {
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#password_change_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
             alert("failed " + data)
         }
@@ -810,6 +810,7 @@ function signInAJAX(ajaxWndName, reload = true) {
             atmWnd.content(ajaxWndName, $(data).find("#sign_in_form"));
             $('#sign_in_form').on('submit', function (event) {
                 event.preventDefault();
+
                 $('#' + ajaxWndName + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
                 signIn(ajaxWndName, reload);
             });
@@ -861,14 +862,211 @@ function signIn(ajaxWndName, reload) {
         },
 
         error: function (xhr, errmsg, err) {
-            console.log(xhr.status + ": " + xhr.responseText);
+            console.log(xhr.status + ": " + errmsg);
             $('#sign_in_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
             alert("failed " + data)
         }
     });
 }
 
+/*
+ User fraction
+ */
+function loadFraction(uid = 1) {
+    const ajaxWndName = 'fraction_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Cписок пользователей группы',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        1000
+    );
+    ajaxLoadingFirst("/pda/fraction/", uid, ajaxWndName, "fraction");
+}
 
+/* Join the Fraction */
+function JoinFractionForm() {
+    const ajaxWndName = 'join_fraction_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Вступить в группировку',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+    );
+    $.ajax({
+        url: 'fraction/join/',
+        success: function (data) {
+            atmWnd.content(ajaxWndName, $(data));
+            let fraction_view = $("#" + ajaxWndName + " #fraction_view"),
+                fractions_list = $("#" + ajaxWndName + " #fractions_list");
+            $('#join_fraction_form select').on('change', function () {
+                let fraction_item = fractions_list.children("#fraction" + this.value).clone();
+                fraction_view.html(fraction_item);
+                fraction_view.children("div").children(".fraction_img").css("display", "block");
+            });
+            $('#join_fraction_form').on('submit', function (event) {
+                $('#join_fraction_cause').text("");
+                event.preventDefault();
+                $('#' + ajaxWndName + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+                JoinFraction();
+            });
+        }
+    })
+}
+
+
+function JoinFraction() {
+    $.ajax({
+        url: 'fraction/join/',
+        type: "POST", // http method
+        data: {
+            fraction_id: $('#join_fraction_form #id_group').val(),
+            comment: $("#join_fraction_form #id_user_message").val()
+        },
+
+
+        success: function (data) {
+            if (data.result) {
+                $('#join_fraction_wnd .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
+                atmWnd.hide('join_fraction_wnd');
+            } else {
+                $('#join_fraction_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+                $("#join_fraction_cause").text(data.cause);
+            }
+
+
+        },
+
+        error: function (xhr, errmsg, err) {
+            $('#join_fraction_cause').text(xhr.status + ": " + errmsg);
+            console.log(xhr.status + ": " + errmsg);
+            $('#join_fraction_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+        }
+    });
+}
+
+function loadUserFractionApps(uid = 1) {
+    const ajaxWndName = 'user_fraction_apps_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Cписок заявок на вступление в группировки',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        1000
+    );
+    ajaxLoadingFirst("/pda/fraction/apps/", uid, ajaxWndName, "fraction");
+}
+
+function loadGroupFractionApps(uid = 1) {
+    const ajaxWndName = 'group_fraction_apps_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Cписок заявок на вступление в группировку',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        1000
+    );
+    ajaxLoadingFirst("/pda/fraction/apps_lead/", uid, ajaxWndName, "fraction");
+}
+
+/* Accept/Refuse joining */
+function accept(pk) {
+    let id = Number(pk),
+        comment = $("#app_comment" + id).val();
+    $("#leader_decision" + id).hide();
+    $('#app_form' + id + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+    alert(id + " " + comment)
+    $.ajax({
+        url: "/pda/fraction/decide/accept/",
+        type: 'POST',
+        data: {
+            'app_id': id,
+            'message': comment
+        },
+
+        success: function (data) {
+            if (data.result) {
+                $('#app_form' + id + ' .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
+            } else {
+                $('#join_fraction_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+                $('#app_form' + id + ' .post_result').text(data.cause);
+            }
+        },
+        error: function (xhr, errmsg, err) {
+            $('#join_fraction_cause').text(xhr.status + ": " + errmsg);
+            console.log(xhr.status + ": " + errmsg);
+            $('#app_form' + id + ' .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+        }
+    });
+
+    return false;
+}
+
+function refuse(pk) {
+    let id = Number(pk),
+        comment = $("#app_comment" + id).val();
+    $("#leader_decision" + id).hide();
+    $('#app_form' + id + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+
+    $.ajax({
+        url: "/pda/fraction/decide/refuse/",
+        type: 'POST',
+        data: {
+            'app_id': id,
+            'message': comment
+        },
+
+        success: function (data) {
+            if (data.result) {
+                $('#app_form' + id + ' .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
+            } else {
+                $('#join_fraction_wnd .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+                $('#accept_group_cause').text(data.cause);
+            }
+        },
+        error: function (xhr, errmsg, err) {
+            $('#accept_group_cause').text(xhr.status + ": " + errmsg);
+            console.log(xhr.status + ": " + errmsg);
+            $('#app_form' + id + ' .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+        }
+    });
+
+    return false;
+}
+
+function expire(pk) {
+    let id = Number(pk),
+        comment = $("#expire_user #expired_cause").val();
+    $('#expire_user .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
+
+    $.ajax({
+        url: "/pda/fraction/decide/expel/",
+        type: 'POST',
+        data: {
+            'uid': id,
+            'message': comment
+        },
+
+        success: function (data) {
+            if (data.result) {
+                $('#expire_user .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
+            } else {
+                $('#expire_user .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+                $('#expire_user #error_cause').text(data.cause);
+            }
+        },
+        error: function (xhr, errmsg, err) {
+            $('#expire_user #error_cause').text(xhr.status + ": " + errmsg);
+            console.log(xhr.status + ": " + errmsg);
+            $('#expire_user .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
+        }
+    });
+
+    return false;
+}
+
+
+/* OTHER Functions */
 function intOr0(value = "") {
     return parseInt(value || 0);
 }

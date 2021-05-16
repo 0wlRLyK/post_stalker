@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.db import models
 
+from users.models import User
 from users.models_dir import equipment
 
 
@@ -46,5 +47,53 @@ class Fraction(models.Model):
     show_in_list = models.BooleanField(default=True, verbose_name="Отображать в списке групп")
     can_entry = models.BooleanField(default=True, verbose_name="Возможность вступления")
 
+    def get_group_name(self):
+        return self.group.name
+
+    def get_users_count(self):
+        return User.objects.filter(groups__id=self.group_id).count()
+
     def __str__(self):
         return "{}".format(self.group.name)
+
+
+class ApplicationForMembership(models.Model):
+    user = models.ForeignKey(User, verbose_name="Автор заявления", null=True, on_delete=models.SET_NULL,
+                             related_name="application_user")
+    group = models.ForeignKey(Fraction, verbose_name="Группа для вступления", null=True,
+                              on_delete=models.SET_NULL, limit_choices_to={"can_entry": True})
+    leader = models.ForeignKey(User, verbose_name="Лидер группировки", blank=True, null=True, on_delete=models.SET_NULL,
+                               related_name="application_leader")
+    add_datetime = models.DateTimeField(auto_now_add=True, null=True, verbose_name="Время и дата добавления")
+    user_message = models.TextField(blank=True, null=True, verbose_name="Комментарий")
+    leader_message = models.TextField(blank=True, null=True, verbose_name="Ответ лидера группировки")
+    decision = models.BooleanField(default=False, verbose_name="Разрешение/Отказ на вступление")
+    archived = models.BooleanField(default=False, verbose_name="Архивное заявление",
+                                   help_text="Данное заявление уже было рассмотрено лидером группировки")
+    banished = models.BooleanField(default=False, verbose_name="Изгнан")
+
+    def get_app_status(self):
+        if self.archived and not self.decision and not self.banished:
+            return "refused"
+        elif self.archived and self.decision and not self.banished:
+            return "accepted"
+        elif self.archived and self.banished:
+            return "banished"
+        else:
+            return "default"
+
+    def get_leader_msg(self):
+        if self.leader_message:
+            return self.leader_message
+        elif self.archived and not self.decision and not self.banished:
+            return "Отказано"
+        elif self.archived and self.decision and not self.banished:
+            return "Принят"
+        elif self.archived and self.banished:
+            return "Изгнан"
+        else:
+            return "(Заяка в процессе рассмотрения)"
+
+    class Meta:
+        verbose_name = "Заявка на вступление в группировку"
+        verbose_name_plural = "Заявки на вступление в группировку"

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ fraction }}</title>
+</head>
+<body>
+<h3>{{ fraction.get_group_name }}</h3>
+<hr>
+{% if fraction.leader %}
+    <p>Лидер группировки -
+        <strong>
+            <a href="{% url "pda:user_pda" fraction.leader.username %}">{{ fraction.leader }}</a>
+        </strong></p>
+{% endif %}
+{% if fraction.leader %}
+    <p>Заместитель лидера группировки -
+        <strong>
+            <a href="{% url "pda:user_pda" fraction.deputy_leader.username %}">{{ fraction.deputy_leader }}</a>
+        </strong></p>
+{% endif %}
+<p>Сила группировки - <strong>{{ fraction.power }} / 31</strong></p>
+<p>Колличество пользователей в группе - <strong>{{ fraction.get_users_count }}</strong></p>
+<div style="display: flex; justify-content: center;flex-direction: row; width: 100%; align-items: center;">
+    <p style="width: 15%; text-align: center;"><strong>Имя пользователя</strong></p>
+    <p style="width: 10%; text-align: center;"><strong>Аватар</strong></p>
+    <p style="width: 100px; text-align: center;"><strong>Группировка</strong></p>
+    <p style="width: 100px; text-align: center;"><strong>Ранг</strong></p>
+    <p style="width: 100px; text-align: center;"><strong>Статус</strong></p>
+    <p style="width: 10%; text-align: center;"><strong>Пол</strong></p>
+    <p style="width: 35%; text-align: center;"><strong>Звание</strong></p>
+
+</div>
+{% for user in user_list %}
+    <div style="display: flex; justify-content: center; flex-direction: row; width: 100%; align-items: center;">
+        <h4 style="width: 15%; text-align: center;">
+            <a href="{% url "pda:user_pda" user.username %}">{{ user.username }}</a>
+        </h4>
+        <div style="width: 10%; text-align: center;">
+            <img src="{{ user.get_avatar }}" alt="{{ user.username }}" height="100">
+        </div>
+        <img src="{{ user.get_fraction.icon.url }}" alt="{{ user.get_fraction.name }}"
+             title="{{ user.get_fraction.name }}">
+        <img src="{{ user.get_rank.url }}" alt="{{ user.get_rank.name }}" title="{{ user.get_rank.name }}">
+        <img src="{{ user.get_online.url }}" alt="{{ user.get_online.name }}" title="{{ user.get_online.name }}">
+        <p style="width: 10%; text-align: center;">{{ user.get_gender }}</p>
+        <p style="width: 35%; text-align: center;">{% if user.title %}{{ user.title }}{% endif %}</p>
+    </div>
+{% endfor %}
+
+
+<div class="pagination p12">
+    <ul>
+        {% if page_obj.has_previous %}
+            <a href="{% url "pda:fraction_list" fraction.group.id %}?page=1">
+                <li>&laquo;</li>
+            </a>
+            <a href="{% url "pda:fraction_list" fraction.group.id %}?page={{ page_obj.previous_page_number }}">
+                <li>{{ page_obj.previous_page_number }}</li>
+            </a>
+        {% endif %}
+        <a class="is-active" href="{% url "pda:fraction_list" fraction.group.id %}?page={{ page_obj.number }}">
+            <li>{{ page_obj.number }}</li>
+        </a>
+        {% if page_obj.has_next %}
+            <a href="{% url "pda:fraction_list" fraction.group.id %}?page={{ page_obj.next_page_number }}">
+                <li>{{ page_obj.next_page_number }}</li>
+            </a>
+            <a href="{% url "pda:fraction_list" fraction.group.id %}?page={{ page_obj.paginator.num_pages }}">
+                <li>&raquo;</li>
+            </a>
+        {% endif %}
+    </ul>
+</div>
+</body>
+</html>
