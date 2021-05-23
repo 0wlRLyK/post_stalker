@@ -27,6 +27,7 @@ urlpatterns = [
                   path('users/', include('userena.urls')),
                   path('u/funcs/', include('users.urls.functional')),
                   path('pda/', include('users.urls.pda')),
+                  path('chats/', include('chat.urls')),
 
                   path("pda_id/<int:uid>/", pda_detail, name="user_pda_id"),
               ] + static(settings.STATIC_URL, docuent_root=settings.STATICFILES_DIRS)

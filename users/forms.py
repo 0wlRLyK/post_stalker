@@ -34,12 +34,15 @@ class ChoiceImageColorForm(forms.Form):
     IMG_RANGE = UserSettings.load().ico_range_numbers
     IMAGES = [
 
-        (f"{img}", f"/static/post_stalker/ico/Chat/{img}.png") for img in range(IMG_RANGE.lower, IMG_RANGE.upper)
+        (f"{img}", f"/static/chats/icons/{img}.png") for img in range(IMG_RANGE.lower, IMG_RANGE.upper)
     ]
     COLORS = [
-        ("green", "green"),
-        ("red", "red"),
-        ("yellow", "yellow"),
+        ("#78866b", "#78866b"),
+        ("#FF8C00", "#FF8C00"),
+        ("orange", "orange"),
+        ("#0000CD", "#0000CD"),
+        ("#3c95af", "#3c95af"),
+        ("#2f4532", "#2f4532"),
     ]
     ico = forms.ChoiceField(choices=IMAGES, widget=forms.RadioSelect, required=False)
     color = forms.ChoiceField(choices=COLORS, widget=forms.RadioSelect, required=False)

@@ -16,6 +16,8 @@ django-userena-ce = "*"
 django-guardian = "*"
 easy-thumbnails = "*"
 bleach = "*"
+django-channels = "*"
+channels = "*"
 
 [dev-packages]
 

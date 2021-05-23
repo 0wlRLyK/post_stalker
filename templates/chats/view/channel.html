@@ -1,0 +1,19 @@
+{% for chat in object.chatmessage_set.all %}
+    <div>
+        <div class="chats-1">
+            <div class="user_descr">
+                <img src="{{ chat.user.get_chat_ico }}" height="27px" alt="">
+                <a href="{% url "pda:user_pda" chat.user.username %}">
+                    <strong style="color: {{ chat.user.chat_color }}">{{ chat.user }}</strong>
+                </a>
+                [ {{ chat.timestamp|date:"d.m.y H:i" }} ]
+            </div>
+        </div>
+        <div class="chats-2">
+            <div class="content">
+                {{ chat.message }}
+            </div>
+        </div>
+        <div class="chats-3"></div>
+    </div>
+{% endfor %}

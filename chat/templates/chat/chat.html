@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+
+    <title>CHAT</title>
+    {% if chat.roleplay %}
+        <link type="text/css" rel="StyleSheet" href="/static/post_stalker/users/profile/css/my.css"/>
+        <link type="text/css" rel="StyleSheet" href="/static/chats/channel/chat-styles.css"/>
+        <link type="text/css" rel="StyleSheet" href="/static/chats/channel/chst-dop.css"/>
+        <script src="/static/js/ajax.js"></script>
+    {% endif %}
+</head>
+
+
+<body>
+<div id='chat-items'>
+    {% include "chats/view/channel.html" %}
+</div>
+{% if chat.roleplay %}
+    <div class="chat-add">{{ form.label_tag }}
+        <form id='form' method='POST'> {% csrf_token %}
+
+            <textarea name="{{ form.message.html_name }}" id="{{ form.message.id_for_label }}" cols="30"
+                      rows="10"></textarea>
+            <input type='submit' id="submit_btn" class='comm' value="" disabled/>
+        </form>
+    </div>
+
+{% else %}
+    <form id='form' method='POST'> {% csrf_token %}
+        {{ form.message }}
+        <input type='submit' id="submit_btn" class='btn btn-primary' disabled/>
+    </form>
+{% endif %}
+
+
+<script src="/static/js/jquery.min.js"></script>
+<script>
+    let THIS_USERNAME = "{{ user.username }}",
+        NEW_LOCATION = window.location.pathname;
+    $(document).ready(function () {
+        // alert("jquery world")
+        let formData = $("#form"),
+            messageInput = $("#id_message"),
+            chatItems = $('#chat-items'),
+            loc = window.location,
+            wsStart = "ws://";
+        if (loc.protocol == "https:") {
+            wsStart = "wss://";
+        }
+        let webSocketEndpoint = wsStart + loc.host + NEW_LOCATION,  // ws : wss
+            socket = new WebSocket(webSocketEndpoint)
+
+        socket.onmessage = function (e) {
+
+            console.log('message', e)
+            var msgData = JSON.parse(e.data);
+            console.log(msgData);
+            chatItems.prepend(`
+<div>
+<div class="chats-1">
+    <div class="user_descr">
+        <img src="${msgData.icon}" height="27px" alt="">
+        <a href="${msgData.url}">
+            <strong style="color: ${msgData.color}">${msgData.user}</strong>
+        </a>
+        [ ${msgData.datetime} ]
+    </div>
+</div>
+<div class="chats-2">
+    <div class="content">
+        ${msgData.msg}
+    </div>
+</div>
+<div class="chats-3"></div>
+</div>`);
+        }
+
+        socket.onopen = function (e) {
+            $("#submit_btn").attr("disabled", false);
+            console.log('open', e)
+            formData.submit(function (event) {
+                event.preventDefault();
+                var messageText = messageInput.val()
+                console.log(messageText)
+                var jsonData = JSON.stringify({msg: messageText, user: 'jmitchel3'})
+                socket.send(jsonData)
+                formData[0].reset()
+            })
+        }
+
+        socket.onerror = function (e) {
+            console.log('error', e)
+        }
+        socket.onclose = function (e) {
+            console.log('closed', e)
+        }
+
+
+        if (socket.readyState == WebSocket.OPEN) {
+
+        } else if (socket.readyState == WebSocket.CONNECTING) {
+            console.log("connecting..")
+        }
+
+
+    })
+
+</script>
+</body>

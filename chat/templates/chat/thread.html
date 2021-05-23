@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <style>
+        .msg {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .msg:last-of-type {
+            margin: 0;
+        }
+
+        .msg-img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            background: #ddd;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            border-radius: 50%;
+        }
+
+        .msg-bubble {
+            max-width: 450px;
+            padding: 15px;
+            border-radius: 15px;
+            background: #ececec;
+        }
+
+        .msg-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .msg-info-name {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .msg-info-time {
+            font-size: 0.85em;
+        }
+
+        .user-msg .msg-bubble {
+            border-bottom-left-radius: 0;
+        }
+
+        .my-msg {
+            flex-direction: row-reverse;
+        }
+
+        .my-msg .msg-bubble {
+            background: #579ffb;
+            color: #fff;
+            border-bottom-right-radius: 0;
+        }
+
+        .my-msg .msg-img {
+            margin: 0 0 0 10px;
+        }
+
+        .msger-inputarea {
+            display: flex;
+            padding: 10px;
+            border-top: 2px solid #ddd;
+            background: #eee;
+        }
+
+        .msger-inputarea * {
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 1em;
+        }
+
+        .msger-input {
+            flex: 1;
+            background: #ddd;
+        }
+
+        .msger-send-btn {
+            margin-left: 10px;
+            background: rgb(0, 196, 65);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.23s;
+        }
+
+        .msger-send-btn:hover {
+            background: rgb(0, 180, 50);
+        }
+
+    </style>
+    <h3>Thread for {% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</h3>
+    <div id='chat-items'>
+        {% for chat in object.dialogmessage_set.all %}
+            <div class="msg {% if chat.user == user %}my{% else %}user{% endif %}-msg">
+                <div
+                        class="msg-img"
+                        style="background-image: url({{ chat.user.avatar.url }})"></div>
+
+                <div class="msg-bubble">
+                    <div class="msg-info">
+                        <div class="msg-info-name">{{ chat.user }}</div>
+                        <div class="msg-info-time">{{ chat.timestamp|date:"d.m.y H:i" }}</div>
+                    </div>
+
+                    <div class="msg-text">
+                        {{ chat.message }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <form id='form' method='POST'> {% csrf_token %}
+        {{ form.as_p }}
+        <input type='submit' class='btn btn-primary'/>
+    </form>
+
+
+
+{% endblock %}
+{% block javascript %}
+
+    <script>
+        let THIS_USERNAME = "{{ user.username }}";
+
+        function find_sender(this_user, sended_user) {
+            console.log(this_user, sended_user, this_user === sended_user);
+            return this_user === sended_user ? "my" : "user";
+        }
+
+        $(document).ready(function () {
+            // alert("jquery world")
+            let formData = $("#form"),
+                messageInput = $("#id_message"),
+                chatItems = $('#chat-items'),
+                loc = window.location,
+                wsStart = "ws://";
+            if (loc.protocol == "https:") {
+                wsStart = "wss://";
+            }
+            let webSocketEndpoint = wsStart + loc.host + loc.pathname,  // ws : wss
+                socket = new WebSocket(webSocketEndpoint)
+
+            socket.onmessage = function (e) {
+
+                console.log('message', e)
+                // alert(e.data)
+                var msgData = JSON.parse(e.data);
+                console.log(msgData);
+                let sender = find_sender(THIS_USERNAME, msgData.user);
+                alert(sender);
+                chatItems.append(`<div class="msg ${sender}-msg">
+              <div class="msg-img" style="background-image: url(${msgData.avatar})"></div>
+              <div class="msg-bubble">
+                <div class="msg-info">
+                  <div class="msg-info-name">${msgData.user}</div>
+                  <div class="msg-info-time">${msgData.datetime}</div>
+                </div>
+
+                <div class="msg-text">
+                  ${msgData.msg}
+                </div>
+              </div>
+        </div>`);
+            }
+
+            socket.onopen = function (e) {
+                console.log('open', e)
+                formData.submit(function (event) {
+                    event.preventDefault()
+                    var messageText = messageInput.val()
+                    console.log(messageText)
+                    var jsonData = JSON.stringify({msg: messageText, user: 'jmitchel3'})
+                    socket.send(jsonData)
+                    formData[0].reset()
+                })
+            }
+
+            socket.onerror = function (e) {
+                console.log('error', e)
+            }
+            socket.onclose = function (e) {
+                console.log('closed', e)
+            }
+
+
+            if (socket.readyState == WebSocket.OPEN) {
+
+            } else if (socket.readyState == WebSocket.CONNECTING) {
+                console.log("connecting..")
+            }
+
+
+        })
+
+    </script>
+{% endblock %}

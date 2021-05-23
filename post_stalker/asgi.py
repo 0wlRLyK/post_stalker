@@ -9,8 +9,26 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/asgi/
 
 import os
 
-from django.core.asgi import get_asgi_application
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.security.websocket import AllowedHostsOriginValidator
+from django.conf.urls import url
+
+from chat.consumers import DialogConsumer, ChatConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'post_stalker.settings')
 
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    # Websocket chat handler
+    'websocket': AllowedHostsOriginValidator(
+        AuthMiddlewareStack(
+            URLRouter(
+                [
+                    # url(r"chat/", DialogConsumer, name='chat')
+                    url(r"d/(?P<username>[\w.@+-]+)/$", DialogConsumer.as_asgi(), name='dialog'),
+                    url(r"chat/(?P<slug>[\w.@+-]+)/$", ChatConsumer.as_asgi(), name='chat')
+                ]
+            )
+        ),
+    ),
+})

@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +69,7 @@ INSTALLED_APPS = [
 
     # Post-stalker apps
     'users',
+    'chat',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -113,7 +115,12 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'post_stalker.wsgi.application'
+ASGI_APPLICATION = 'post_stalker.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

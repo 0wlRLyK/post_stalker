@@ -34,7 +34,7 @@
             </label><br>
             {% for choice in form.color %}
                 <span class="radio">{{ choice.tag }}</span>
-                <span style="color: {{ choice.choice_label }}">{{ user.username }}</span>
+                <span style="color: {{ choice.choice_label }}"><strong>{{ user.username }}</strong></span>
             {% endfor %}
         </fieldset>
         <fieldset>

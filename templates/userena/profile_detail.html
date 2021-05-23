@@ -5,16 +5,20 @@
     <head>
         <title>Личный КПК Сталкера: {{ post_userusername }}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <link type="text/css" rel="StyleSheet" href="{% static "/post_stalker/users/profile/css/my.css" %}"/>
+        <link type="text/css" rel="StyleSheet" href="/static/post_stalker/users/profile/css/my.css"/>
         <link type="text/css" rel="StyleSheet" href="{% static "/post_stalker/users/profile/css/hud.css" %}"/>
         <link type="text/css" rel="StyleSheet" href="/static/post_stalker/css/px-pagination.css"/>
         <script src="/static/js/jquery.min.js"></script>
+
         <script src="/static/post_stalker/js/atomWindows.js"></script>
         <script src="/static/post_stalker/js/post_st/profile.js"></script>
+
+
         <script src="/static/js/ajax.js"></script>
+        <script src="/static/js/news_chat.js"></script>
         <script src="/static/post_stalker/js/px-pagination.js"></script>
+
     </head>
-    <style type="text/css">@import url('http://post-stalker.com/design/ajax/ajax-2.0.css') all;</style>
     <body>
     <div class="container">
         <script type="text/javascript">
@@ -201,7 +205,7 @@
                             <hr>
                             <b>Город:</b> {{ post_user.state }}
                             <hr>
-                            <b>Дата регистрации:</b> {{ post_user.date_joined }}
+f                            <b>Дата регистрации:</b> {{ post_user.date_joined }}
                             <hr>
                             <b>Дата входа:</b> {{ post_user.last_login }}
                             </span>
@@ -284,12 +288,12 @@
                         <td class="statys" valign="top">
                             {% if post_user.id == user.id %}
                                 <a onclick="selectImgColorForm()">
-                                    <img id="chat_icon" src="/static/post_stalker/ico/Chat/{{ post_user.ico_num }}.png"
+                                    <img id="chat_icon" src="/static/chats/icons/{{ post_user.ico_num }}.png"
                                          title="Статус"
                                          style="height: 35px;padding: 0 15px 0 0;float: left" alt=""/>
                                 </a>
                             {% else %}
-                                <img id="chat_icon" src="/static/post_stalker/ico/Chat/{{ post_user.ico_num }}.png"
+                                <img id="chat_icon" src="/static/chats/icons/{{ post_user.ico_num }}.png"
                                      title="Статус"
                                      style="height: 35px;padding: 0 15px 0 0;float: left" alt=""/>
                             {% endif %}
@@ -403,32 +407,24 @@
                        align="center" border="0" cellpadding="0" cellspacing="0" height="1190" width="1024px">
                     <tr>
                         <td style="padding-left:15px;padding-top:30px;padding-right:30px;" valign="top">
-                            <ul id="news">
-                                <p>
-                                    <img src="http://gsc-stalker.ru/ekippirovka/pda/icon/ui_iconstotal54.png"
-                                         align="left" border="0">Вступай в "Свободу"! Только здесь тебя оценят и примут
-                                    как родного! Никакого обязалова и идеологической пурги, никаких утренних по будок и
-                                    минимум сухого закона! Если ты настоящий сталкер и хочешь быть среди таких же как
-                                    сам, вливайся в наши ряды, время вливания любое, принимаем без перерывов и выходных,
-                                    ежедневно и еженочно, Свобода приветствует всех кого привели к нам дороги Зоны.
 
-                                </p>
-                                <p>
-                                    <img src="http://gsc-stalker.ru/ekippirovka/pda/icon/ui_iconstotal53.png"
-                                         align="left" border="0">люди, в оптике сместилась линза. Что делать? В морг?
-                                    Или техник исправит?
-                                </p>
-                                <p>
-                                    <img src="http://gsc-stalker.ru/ekippirovka/pda/icon/ui_iconstotal7.png"
-                                         align="left" border="0">"Если ты хочешь быть лучшим из лучших, если тебе
-                                    надоело находиться в Зоне Отчуждения нелегально подпиши контракт на службу в Военных
-                                    сталкерах. У нас ты получишь лучшие образцы оружия и снаряжения. Стань одним из нас,
-                                    перед тобой откроются все неизведанные тайны и дороги Зоны."
-                                </p>
-                            </ul>
-                            <br><br><br><br><br>
-                            <link type="text/css" rel="StyleSheet" href="http://post-stalker.com/chat-styles.css"/>
-                            $CHAT_BOX$
+                            <div id="chatNews"></div>
+                            <button id="getNews">Обновить запись</button>
+                            <br>
+                            <div id="channels_chat"></div>
+                            <script>
+                                getRandomChatNews();
+                                $("#getNews").click(function () {
+                                    getRandomChatNews();
+                                });
+                                $.ajax({
+                                    url: "/chats/chat/channel/",
+                                    success: function (data) {
+                                        $("#channels_chat").html(data);
+                                        NEW_LOCATION = "/chats/chat/channel/";
+                                    }
+                                })
+                            </script>
                         </td>
                     </tr>
                 </table>

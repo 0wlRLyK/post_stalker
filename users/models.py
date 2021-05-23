@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.cache import cache
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from userena.models import UserenaBaseProfile
 from userena.models import UserenaSignup
@@ -178,6 +179,19 @@ class User(AbstractUser):
             self.equip_id = inv.id
             super(User, self).save()
         return inv
+
+    def get_color(self):
+        if self.chat_color:
+            return self.chat_color
+        return "inherit"
+
+    def get_chat_ico(self):
+        if self.ico_num:
+            return f"/static/chats/icons/{self.ico_num}.png"
+        return f"/static/chats/icons/{1}.png"
+
+    def get_absolute_url(self):
+        return reverse("pda:user_pda", args=[str(self.username)])
 
 
 class UserProfile(UserenaBaseProfile):
