@@ -137,10 +137,46 @@ a:hover {
 .ava {
     position: absolute;
     display: block;
-    width: 300px;
-    height: 165px;
+    width: 170px;
+    height: 220px;
     margin-left: 730px;
     margin-top: 90px;
+}
+
+.avatar {
+    position: relative;
+    display: inline-block;
+    transition: 1s ease-in-out;
+}
+
+.avatar::after {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    background: url('/static/post_stalker/ico/avatar.svg') center no-repeat;
+    background-size: 50px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+}
+
+.avatar:hover:after {
+    opacity: 1;
+}
+
+.avatar img {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+}
+
+.avatar:hover img {
+    opacity: 0.7;
 }
 
 .dan {
@@ -600,4 +636,40 @@ details[open] {
 details[open] summary {
     border-bottom: 1px solid #aaa;
     margin-bottom: .5em;
+}
+
+.user_ico {
+    position: relative;
+    display: inline-block;
+    transition: 1s ease-in-out;
+}
+
+.user_ico::after {
+    content: '';
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    background: url('/static/post_stalker/ico/edit.svg') center no-repeat;
+    background-size: 25px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+}
+
+.user_ico:hover:after {
+    opacity: 1;
+}
+
+.user_ico img {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -webkit-transition: opacity 0.5s ease-in-out;
+}
+
+.user_ico:hover img {
+    opacity: 0.7;
 }

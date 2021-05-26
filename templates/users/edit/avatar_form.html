@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма для изменения аватара</title>
+    <link href="/static/css/cropper.min.css" rel="stylesheet">
+    <style>
+
+        .page {
+            margin: 1em auto;
+            /* max-width: 768px; */
+            display: flex;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            height: 100%;
+            width: 95%;
+        }
+
+        .box {
+            width: 100%;
+        }
+
+        .box-2 {
+            width: 50%;
+            float: left;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-flow: wrap;
+        }
+
+        .options label,
+        .options input {
+            width: 4em;
+            padding: 0.5em 1em;
+        }
+
+        .btn {
+            background: white;
+            color: black;
+            border: 1px solid black;
+            padding: 0.5em 1em;
+            text-decoration: none;
+            margin: 0.8em 0.3em;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .tool_btn {
+            padding: 5px 7px;
+            background: #5b8c5b;
+            border: none;
+            border-radius: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<main class="page">
+    <div class="box" style="display: flex; justify-content: center;">
+        <fieldset class="box-2">
+            <legend>Оригинал изображения</legend>
+            <div class="result" style="width: calc(100%/1.5); max-width: 500px; max-height: 300px"></div>
+        </fieldset>
+        <!--rightbox-->
+        <fieldset class="box-2 img-result hide">
+            <legend>Превью</legend>
+            <img class="cropped" src="" alt="">
+        </fieldset>
+    </div>
+    <fieldset class="box hide" id="cropper_toolbox">
+        <fieldset style="display: inline-block;">
+            <button class="tool_btn" id="crop_mode-move" title="Режим перемещения">
+                <img src="/static/post_stalker/ico/toolbar/move.svg" alt="" height="22"></button>
+            <button class="tool_btn" id="crop_mode-crop" title="Режим обрезки">
+                <img src="/static/post_stalker/ico/toolbar/crop.svg" alt="" height="22"></button>
+        </fieldset>
+        <fieldset style="display: inline-block;">
+            <button class="tool_btn" id="crop_zoom-in" title="Увеличить">
+                <img src="/static/post_stalker/ico/toolbar/zoom-in.svg" alt="" height="22"></button>
+            <button class="tool_btn" id="crop_zoom-out" title="Уменьшить">
+                <img src="/static/post_stalker/ico/toolbar/zoom-out.svg" alt="" height="22"></button>
+        </fieldset>
+        <fieldset style="display: inline-block;">
+            <button class="tool_btn" id="crop_left" title="Передвинуть влево">
+                <img src="/static/post_stalker/ico/toolbar/left.svg" alt="" height="22"></button>
+            <button class="tool_btn" id="crop_right" title="Передвинуть вправо">
+                <img src="/static/post_stalker/ico/toolbar/right.svg" alt="" height="22"></button>
+            <button class="tool_btn" id="crop_up" title="Передвинуть вверх">
+                <img src="/static/post_stalker/ico/toolbar/up.svg" alt="" height="22"></button>
+            <button class="tool_btn" id="crop_down" title="Передвинуть вниз">
+                <img src="/static/post_stalker/ico/toolbar/down.svg" alt="" height="22"></button>
+        </fieldset>
+
+    </fieldset>
+    <form method="post" id="change_avatar_form" enctype='multipart/form-data' class="box">
+        {% csrf_token %}
+        {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+        {% for field in form.visible_fields %}
+            <fieldset>
+                <legend>{{ field.label }}</legend>
+                {{ field }}
+            </fieldset>
+        {% endfor %}
+
+        <fieldset>
+            <button id="show_avatar_preview">Превью</button>
+            <input type="submit" id="send_avatar_form" value="Отправить">
+            <div style="display: inline-block;" class="post_result"></div>
+        </fieldset>
+    </form>
+
+</main>
+{% if not referer %}
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/ajax.js"></script>
+    <script src="/static/js/cropper.min.js"></script>
+
+
+{% endif %}
+<script src="/static/js/cropper.min.js"></script>
+<script src="/static/post_stalker/js/post_st/crop.js"></script>
+<script>
+    cropIt()
+</script>
+
+</body>
+</html>

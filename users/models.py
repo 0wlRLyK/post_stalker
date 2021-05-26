@@ -10,6 +10,10 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from userena.models import UserenaBaseProfile
 from userena.models import UserenaSignup
+from userena.utils import (
+    generate_nonce,
+    get_datetime_now,
+)
 
 from users.models_dir.equipment import Inventory
 from users.online_users.models import OnlineUserActivity
@@ -19,13 +23,32 @@ def upload_to_item(instance, filename):
     return '/'.join(['Equipment', str(instance.item_type), filename])
 
 
+def upload_to_avatar(instance, filename):
+    extension = filename.split(".")[-1].lower()
+    type_img = "avatars/"
+    username = "{}/".format(instance.username)
+    date = "{}/".format(get_datetime_now().date())
+    path = "" % {
+        "username": instance.username,
+        "id": instance.id,
+        "date": instance.date_joined,
+        "date_now": get_datetime_now().date(),
+    }
+    return "%(path)s%(type_img)s%(username)s%(hash)s.%(extension)s" % {
+        "path": path,
+        "type_img": type_img,
+        "username": username,
+        "hash": generate_nonce()[:10],
+        "extension": extension,
+    }
+
 class User(AbstractUser):
     GENDER_CHOICE = [
         (1, "Сталкер"),
         (0, "Сталкерша"),
     ]
     id = models.AutoField(primary_key=True)
-    avatar = models.ImageField(upload_to="avatar", null=True, blank=True)
+    avatar = models.ImageField(upload_to=upload_to_avatar, null=True, blank=True)
     ip = models.GenericIPAddressField(verbose_name="IP", null=True, blank=True)
     birthday = models.DateField(verbose_name="День рождения", null=True, blank=True)
     country = models.CharField(max_length=200, blank=True, null=True, verbose_name="Страна")

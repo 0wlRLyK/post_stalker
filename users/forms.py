@@ -59,7 +59,19 @@ class ChangeUsernameForm(forms.Form):
 class EmptyForm(forms.Form):
     pass
 
+
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["first_name", "last_name", "email", "birthday", "gender", "country", "state", "signature"]
+
+
+class PhotoForm(forms.ModelForm):
+    x = forms.FloatField(widget=forms.HiddenInput())
+    y = forms.FloatField(widget=forms.HiddenInput())
+    width = forms.FloatField(widget=forms.HiddenInput())
+    height = forms.FloatField(widget=forms.HiddenInput())
+
+    class Meta:
+        model = User
+        fields = ('avatar', 'x', 'y', 'width', 'height',)

@@ -3,7 +3,7 @@ from userena import views as userena_views
 
 from users.views import fraction
 from users.views import userena as my_userena
-from users.views.edit import UserEdit
+from users.views.edit import UserEdit, AvatarChanging
 from users.views.userena import profile_detail as pda_detail
 from users.views.userena import profile_detail_current_user
 
@@ -26,6 +26,7 @@ urlpatterns = [
     path("logout/", userena_views.SignoutView.as_view(), name="userena_signout"),
 
     path("edit/", UserEdit.as_view(), name="user_edit"),
+    path("edit/avatar/", AvatarChanging.as_view(), name="user_change_avatar"),
     path("edit_email/",
          my_userena.email_change,
          name="user_email_change",

@@ -675,7 +675,6 @@ function editUser(send_data) {
             $('#change_username_fall').text();
             console.log(xhr.status + ": " + errmsg);
             $('#edit_user_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
-            alert("failed " + data)
         }
     });
 }
@@ -729,7 +728,6 @@ function editEmail(email_data, ajaxWndName) {
             $('#change_username_fall').text();
             console.log(xhr.status + ": " + errmsg);
             $('#edit_email_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
-            alert("failed " + data)
         }
     });
 }
@@ -773,7 +771,6 @@ function editPassword(ajaxWndName) {
 
         success: function (data) {
             console.log(data)
-            alert(data.result);
             if (data.result) {
                 $('#password_change_form .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
                 $.ajax({
@@ -795,7 +792,6 @@ function editPassword(ajaxWndName) {
         error: function (xhr, errmsg, err) {
             console.log(xhr.status + ": " + errmsg);
             $('#password_change_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
-            alert("failed " + data)
         }
     });
 }
@@ -845,7 +841,6 @@ function signIn(ajaxWndName, reload) {
 
         success: function (data) {
             console.log(data)
-            alert(data.result);
             if (data.result) {
                 $('#sign_in_form .post_result').html("<img src='/static/post_stalker/ajax/ok.png' alt='Успешно'>");
                 if (reload) {
@@ -864,7 +859,6 @@ function signIn(ajaxWndName, reload) {
         error: function (xhr, errmsg, err) {
             console.log(xhr.status + ": " + errmsg);
             $('#sign_in_form .post_result').html("<img src='/static/post_stalker/ajax/er.png' alt='Возникла ошибка'>");
-            alert("failed " + data)
         }
     });
 }
@@ -975,7 +969,6 @@ function accept(pk) {
         comment = $("#app_comment" + id).val();
     $("#leader_decision" + id).hide();
     $('#app_form' + id + ' .post_result').html("<img src='/static/post_stalker/ajax/pda_anim2.gif' alt='Отправка данных'>");
-    alert(id + " " + comment)
     $.ajax({
         url: "/pda/fraction/decide/accept/",
         type: 'POST',
@@ -1065,6 +1058,24 @@ function expire(pk) {
     return false;
 }
 
+/* Avatar changing */
+function changeAvatar() {
+    const ajaxWndName = 'ava_wnd';
+    atmWnd(
+        ajaxWndName,
+        'Окно для изменения аватара',
+        "<img src='/static/post_stalker/ajax/pda_anim1.gif' alt='Загрузка'>Загрузка...",
+        '1',
+        1000,
+    );
+    $.ajax({
+        url: "/pda/edit/avatar/",
+        type: "GET",
+        success: function (data) {
+            atmWnd.content(ajaxWndName, data);
+        }
+    })
+}
 
 /* OTHER Functions */
 function intOr0(value = "") {
